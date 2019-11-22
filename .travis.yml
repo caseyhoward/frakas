@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+  - "12.13.1"
+
+jobs:
+  include:
+    - stage: compile
+      script: ./bin/compile.sh
+    - stage: test
+      script: ./bin/test.sh
+    - stage: deploy
+      if: branch = master
+      script: ./bin/deploy.sh
+
+stages:
+  - compile
+  - test
+  - deploy
