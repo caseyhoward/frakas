@@ -4,8 +4,9 @@
   "description": "",
   "main": "src/hanlders/graphql.js",
   "dependencies": {
-    "aws-lambda-graphql": "^0.12.0",
     "aws-lambda": "^0.1.2",
+    "aws-lambda-graphql": "^0.12.0",
+    "graphql": "^14.5.8",
     "graphql-subscriptions": "^1.1.0",
     "graphql-tools": "^4.0.6",
     "ulid": "^2.3.0"
