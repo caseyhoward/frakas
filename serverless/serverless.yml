@@ -4,47 +4,49 @@ provider:
   name: aws
   runtime: nodejs12.x
   region: us-east-1
+  # logs:
+  #   websocket: true
 
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - execute-api:ManageConnections
-      # Resource: "arn:aws:execute-api:*:*:*/development/POST/@connections/*"
-      Resource: "arn:aws:execute-api:*:*:*/POST/@connections/*"
-    - Effect: Allow
-      Action:
-        - dynamodb:DeleteItem
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-      Resource: !GetAtt ConnectionsDynamoDBTable.Arn
-    - Effect: Allow
-      Action:
-        - dynamodb:DescribeStream
-        - dynamodb:GetRecords
-        - dynamodb:GetShardIterator
-        - dynamodb:ListStreams
-      Resource: !GetAtt EventsDynamoDBTable.StreamArn
-    - Effect: Allow
-      Action:
-        - dynamodb:PutItem
-      Resource: !GetAtt EventsDynamoDBTable.Arn
-    - Effect: Allow
-      Action:
-        - dynamodb:BatchWriteItem
-        - dynamodb:DeleteItem
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:Query
-        - dynamodb:Scan
-      Resource: !GetAtt SubscriptionsDynamoDBTable.Arn
-    - Effect: Allow
-      Action:
-        - dynamodb:BatchWriteItem
-        - dynamodb:DeleteItem
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-      Resource: !GetAtt SubscriptionOperationsDynamoDBTable.Arn
+iamRoleStatements:
+  - Effect: Allow
+    Action:
+      - execute-api:ManageConnections
+    # Resource: "arn:aws:execute-api:*:*:*/development/POST/@connections/*"
+    Resource: "arn:aws:execute-api:*:*:*/POST/@connections/*"
+  - Effect: Allow
+    Action:
+      - dynamodb:DeleteItem
+      - dynamodb:GetItem
+      - dynamodb:PutItem
+      - dynamodb:UpdateItem
+    Resource: !GetAtt ConnectionsDynamoDBTable.Arn
+  - Effect: Allow
+    Action:
+      - dynamodb:DescribeStream
+      - dynamodb:GetRecords
+      - dynamodb:GetShardIterator
+      - dynamodb:ListStreams
+    Resource: !GetAtt EventsDynamoDBTable.StreamArn
+  - Effect: Allow
+    Action:
+      - dynamodb:PutItem
+    Resource: !GetAtt EventsDynamoDBTable.Arn
+  - Effect: Allow
+    Action:
+      - dynamodb:BatchWriteItem
+      - dynamodb:DeleteItem
+      - dynamodb:GetItem
+      - dynamodb:PutItem
+      - dynamodb:Query
+      - dynamodb:Scan
+    Resource: !GetAtt SubscriptionsDynamoDBTable.Arn
+  - Effect: Allow
+    Action:
+      - dynamodb:BatchWriteItem
+      - dynamodb:DeleteItem
+      - dynamodb:GetItem
+      - dynamodb:PutItem
+    Resource: !GetAtt SubscriptionOperationsDynamoDBTable.Arn
 
 functions:
   mainHandler:

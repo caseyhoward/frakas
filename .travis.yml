@@ -12,8 +12,8 @@ install:
 
 jobs:
   include:
-    - stage: compile
-      script: ./bin/compile.sh
+    # - stage: compile
+    #   script: ./bin/compile.sh
     - stage: test
       script: ./bin/test.sh
     - stage: deploy
