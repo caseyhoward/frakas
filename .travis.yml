@@ -2,6 +2,13 @@ language: node_js
 node_js:
   - "12.13.1"
 
+before_install:
+  - sudo apt-get update
+  # - sudo apt-get -y install libxml2-dev
+
+install:
+  - npm install -g serverless@1.58.0
+
 jobs:
   include:
     - stage: compile
