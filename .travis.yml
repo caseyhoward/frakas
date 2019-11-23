@@ -16,11 +16,19 @@ jobs:
     #   script: ./bin/compile.sh
     - stage: test
       script: ./bin/test.sh
+    - stage: deploy-pull-request
+      script: ./bin/deploy-pull-request.sh
+    # - stage: acceptance-test
+    #   script: ./bin/acceptance-test.sh
     - stage: deploy
-      if: branch = master
       script: ./bin/deploy.sh
 
 stages:
-  - compile
-  - test
-  - deploy
+  - name: compile
+  - name: test
+  - name: deploy
+    if: branch = master
+  - name: deploy-pull-request
+    if: type = pull_request
+  # - name: acceptance-test
+  #   if: type = pull_request
