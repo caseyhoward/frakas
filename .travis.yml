@@ -12,8 +12,8 @@ install:
 
 jobs:
   include:
-    # - stage: compile
-    #   script: ./bin/compile.sh
+    - stage: compile
+      script: ./bin/compile.sh
     - stage: test
       script: ./bin/test.sh
     - stage: deploy-pull-request
@@ -24,7 +24,7 @@ jobs:
       script: ./bin/deploy.sh
 
 stages:
-  # - name: compile
+  - name: compile
   - name: test
   - name: deploy
     if: branch = master AND type = push AND fork = false
