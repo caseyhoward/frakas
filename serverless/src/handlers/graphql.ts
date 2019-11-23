@@ -73,9 +73,9 @@ const schema = makeExecutableSchema({
         return payload;
       }
     },
-    Query: {
-      serverTime: () => Date.now()
-    },
+    // Query: {
+    //   serverTime: () => Date.now()
+    // },
     Subscription: {
       messageFeed: {
         resolve: (rootValue: Message) => {
