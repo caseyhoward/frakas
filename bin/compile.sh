@@ -1,8 +1,5 @@
 #!/usr/bin/env sh
 
-set -x
-set -e
-
 echo "Compile core"
 cd core && bin/compile.sh && cd ..
 
