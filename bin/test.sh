@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-cd serverless && bin/test.
+cd serverless && bin/test.sh
