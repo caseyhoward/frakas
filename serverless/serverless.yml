@@ -12,7 +12,7 @@ provider:
       Action:
         - execute-api:ManageConnections
       # Resource: "arn:aws:execute-api:*:*:*/development/POST/@connections/*"
-      Resource: "arn:aws:execute-api:*:*:*/POST/@connections/*"
+      Resource: "arn:aws:execute-api:*:*:**/@connections/*"
     - Effect: Allow
       Action:
         - dynamodb:DeleteItem
