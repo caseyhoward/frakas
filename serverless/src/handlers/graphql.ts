@@ -14,6 +14,7 @@ import * as assert from "assert";
 import { makeExecutableSchema } from "graphql-tools";
 import { ulid } from "ulid";
 import * as Environment from "../Environment";
+import * as Graphql from "../Graphql";
 
 const environment: Environment.Environment = Environment.create();
 
@@ -36,30 +37,31 @@ type SendMessageArgs = {
 };
 
 const schema = makeExecutableSchema({
-  typeDefs: /* GraphQL */ `
-    enum MessageType {
-      greeting
-      test
-    }
+  typeDefs: Graphql.typeDefs,
+  // typeDefs: /* GraphQL */ `
+  //   enum MessageType {
+  //     greeting
+  //     test
+  //   }
 
-    type Message {
-      id: ID!
-      text: String!
-      type: MessageType!
-    }
+  //   type Message {
+  //     id: ID!
+  //     text: String!
+  //     type: MessageType!
+  //   }
 
-    type Mutation {
-      sendMessage(text: String!, type: MessageType = greeting): Message!
-    }
+  //   type Mutation {
+  //     sendMessage(text: String!, type: MessageType = greeting): Message!
+  //   }
 
-    type Query {
-      serverTime: Float!
-    }
+  //   type Query {
+  //     serverTime: Float!
+  //   }
 
-    type Subscription {
-      messageFeed(type: MessageType): Message!
-    }
-  `,
+  //   type Subscription {
+  //     messageFeed(type: MessageType): Message!
+  //   }
+  // `,
   resolvers: {
     Mutation: {
       async sendMessage(rootValue: any, { text, type }: SendMessageArgs) {
