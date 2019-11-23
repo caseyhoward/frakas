@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+set -e
+set -x
+
 tsc
 npm install -g serverless@1.58.0
 

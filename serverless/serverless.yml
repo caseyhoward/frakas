@@ -1,5 +1,8 @@
 service: frakas
 
+custom:
+  currentStage: ${opt:stage}
+
 provider:
   name: aws
   runtime: nodejs12.x
