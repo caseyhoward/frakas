@@ -17,7 +17,7 @@ jobs:
     - stage: test
       script: ./bin/test.sh
     - stage: deploy-pull-request
-      script: ./bin/deploy-pull-request.sh
+      script: ./serverless/bin/deploy-pull-request.sh
     # - stage: acceptance-test
     #   script: ./bin/acceptance-test.sh
     - stage: deploy
