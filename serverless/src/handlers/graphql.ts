@@ -13,8 +13,13 @@ import {
 import * as assert from "assert";
 import { makeExecutableSchema } from "graphql-tools";
 import { ulid } from "ulid";
+import * as Environment from "../Environment";
 
-const eventStore = new DynamoDBEventStore();
+const environment: Environment.Environment = Environment.create();
+
+const eventStore = new DynamoDBEventStore({
+  eventsTable: `Events${environment.tableNameSuffix}`
+});
 const pubSub = new PubSub({ eventStore });
 
 type MessageType = "greeting" | "test";
@@ -91,9 +96,14 @@ const schema = makeExecutableSchema({
   } as any
 });
 
-const subscriptionManager = new DynamoDBSubscriptionManager();
+const subscriptionManager = new DynamoDBSubscriptionManager({
+  subscriptionOperationsTableName: `SubscriptionOperations${environment.tableNameSuffix}`,
+  subscriptionsTableName: `Subscriptions${environment.tableNameSuffix}`
+});
+
 const connectionManager = new DynamoDBConnectionManager({
-  subscriptions: subscriptionManager
+  subscriptions: subscriptionManager,
+  connectionsTable: `Connections${environment.tableNameSuffix}`
 });
 
 const eventProcessor = createDynamoDBEventProcessor({

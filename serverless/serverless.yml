@@ -7,6 +7,9 @@ provider:
   # logs:
   #   websocket: true
 
+  environment:
+    FRACAS_TABLE_NAME_SUFFIX: ${env:FRACAS_TABLE_NAME_SUFFIX}
+
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -68,7 +71,7 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         # see DynamoDBConnectionManager
-        TableName: Connections
+        TableName: Connections${env:FRACAS_TABLE_NAME_SUFFIX}
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -82,7 +85,7 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         # see DynamoDBSubscriptionManager
-        TableName: Subscriptions
+        TableName: Subscriptions${env:FRACAS_TABLE_NAME_SUFFIX}
         AttributeDefinitions:
           - AttributeName: event
             AttributeType: S
@@ -99,7 +102,7 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         # see DynamoDBSubscriptionManager
-        TableName: SubscriptionOperations
+        TableName: SubscriptionOperations${env:FRACAS_TABLE_NAME_SUFFIX}
         AttributeDefinitions:
           - AttributeName: subscriptionId
             AttributeType: S
@@ -112,7 +115,7 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         # see DynamoDBEventStore
-        TableName: Events
+        TableName: Events${env:FRACAS_TABLE_NAME_SUFFIX}
         KeySchema:
           - AttributeName: id
             KeyType: HASH

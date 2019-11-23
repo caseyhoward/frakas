@@ -24,7 +24,7 @@ jobs:
       script: ./bin/deploy.sh
 
 stages:
-  - name: compile
+  # - name: compile
   - name: test
   - name: deploy
     if: branch = master AND type = push AND fork = false
