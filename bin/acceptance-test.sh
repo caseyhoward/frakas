@@ -8,7 +8,9 @@ cd serverless
 serverless info --verbose --stage pr-${TRAVIS_PULL_REQUEST}
 export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_DEV}
 export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_DEV}
-FRACAS_WEBSOCKET_ENDPOINT=`serverless info --verbose --stage pr-${TRAVIS_PULL_REQUEST} | grep ServiceEndpointWebsocket | cut -d ' ' -f 2`
+serverless info --verbose --stage pr-${TRAVIS_PULL_REQUEST} | grep ServiceEndpointWebsocket | cut -d ' ' -f 2 > FRACAS_WEBSOCKET_ENDPOINT.txt
+export FRACAS_WEBSOCKET_ENDPOINT=$(cat FRACAS_WEBSOCKET_ENDPOINT.txt)
 echo "FRACAS_WEBSOCKET_ENDPOINT=$FRACAS_WEBSOCKET_ENDPOINT"
 cd ../acceptance-tests
 FRACAS_WEBSOCKET_ENDPOINT=$FRACAS_WEBSOCKET_ENDPOINT bin/test.sh
+rm FRACAS_WEBSOCKET_ENDPOINT.txt
