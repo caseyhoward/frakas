@@ -68,17 +68,17 @@ functions:
           type: dynamodb
           arn:
             Fn::GetAtt: [EventsDynamoDBTable, StreamArn]
-  # graphql-http:
-  #   handler: src/handlers/graphql-http.handler
-  #   events:
-  #     - http:
-  #         path: graphql
-  #         method: post
-  #         cors: true
-  #     - http:
-  #         path: graphql
-  #         method: get
-  #         cors: true
+  graphql-http:
+    handler: src/handlers/graphql-http.handler
+    events:
+      - http:
+          path: graphql
+          method: post
+          cors: true
+      - http:
+          path: graphql
+          method: get
+          cors: true
 
 resources:
   Resources:
