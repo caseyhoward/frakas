@@ -38,30 +38,6 @@ type SendMessageArgs = {
 
 const schema = makeExecutableSchema({
   typeDefs: Graphql.typeDefs,
-  // typeDefs: /* GraphQL */ `
-  //   enum MessageType {
-  //     greeting
-  //     test
-  //   }
-
-  //   type Message {
-  //     id: ID!
-  //     text: String!
-  //     type: MessageType!
-  //   }
-
-  //   type Mutation {
-  //     sendMessage(text: String!, type: MessageType = greeting): Message!
-  //   }
-
-  //   type Query {
-  //     serverTime: Float!
-  //   }
-
-  //   type Subscription {
-  //     messageFeed(type: MessageType): Message!
-  //   }
-  // `,
   resolvers: {
     Mutation: {
       async sendMessage(rootValue: any, { text, type }: SendMessageArgs) {
@@ -73,9 +49,6 @@ const schema = makeExecutableSchema({
         return payload;
       }
     },
-    // Query: {
-    //   serverTime: () => Date.now()
-    // },
     Subscription: {
       messageFeed: {
         resolve: (rootValue: Message) => {
