@@ -1,5 +1,5 @@
 import * as Table from "../Table";
-import * as Models from "fracas-shared/src/Models";
+import * as Models from "fracas-core/src/Models";
 
 export async function create(
   table: Table.Table,

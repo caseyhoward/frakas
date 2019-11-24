@@ -1,6 +1,6 @@
 import * as Table from "../Table";
-import * as Models from "fracas-shared/src/Models";
-import * as Uuid from "fracas-shared/src/Uuid";
+import * as Models from "fracas-core/src/Models";
+import * as Uuid from "fracas-core/src/Uuid";
 
 export async function create(
   table: Table.Table,

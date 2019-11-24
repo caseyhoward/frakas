@@ -1,6 +1,6 @@
 import * as TestDatabase from "../../test/Database";
-import * as Eventually from "fracas-shared/src/test/Eventually";
-import * as Builders from "fracas-shared/src/test/Builders";
+import * as Eventually from "fracas-core/src/test/Eventually";
+import * as Builders from "fracas-core/src/test/Builders";
 import * as Database from "./Database";
 
 describe("Database", () => {

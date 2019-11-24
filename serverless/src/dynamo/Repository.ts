@@ -1,14 +1,14 @@
 import * as Table from "./Table";
-import * as Models from "fracas-shared/src/Models";
-import * as Player from "fracas-shared/src/models/Player";
-import * as Color from "fracas-shared/src/models/Color";
+import * as Models from "fracas-core/src/Models";
+import * as Player from "fracas-core/src/models/Player";
+import * as Color from "fracas-core/src/models/Color";
 import * as MapRepository from "./repositories/MapRepository";
 import * as GameRepository from "./repositories/GameRepository";
 import * as GameConfigurationRepository from "./repositories/GameConfigurationRepository";
 import * as PlayerTokenRepository from "./repositories/PlayerTokenRepository";
 import * as GameTokenRepository from "./repositories/GameTokenRepository";
 import * as PlayerConfigurationRepository from "./repositories/PlayerConfigurationRepository";
-import * as Repository from "fracas-shared/src/Repository";
+import * as Repository from "fracas-core/src/Repository";
 import * as Database from "./Database";
 
 export function create(
@@ -48,8 +48,8 @@ export function create(
     updateGameMap: (id: string, mapId: Models.MapId) =>
       GameConfigurationRepository.updateMap(table, id, mapId),
     updateGameWithoutMap: (game: Models.GameWithoutMap) =>
-      GameRepository.saveWithoutMap(table, game),
-    updateGamePlayer: (player: Player.PlayerConfiguration) =>
-      PlayerConfigurationRepository.update(table, player)
+      GameRepository.saveWithoutMap(table, game)
+    // updateGamePlayer: (player: Player.PlayerConfiguration) =>
+    //   PlayerConfigurationRepository.update(table, player)
   };
 }

@@ -1,5 +1,5 @@
 import * as TestRepository from "../../../test/Repository";
-import * as Uuid from "fracas-shared/src/Uuid";
+import * as Uuid from "fracas-core/src/Uuid";
 
 describe("GameTokenRepository.create", () => {
   it("creates a new game token and finds token by id", async () => {

@@ -6,9 +6,20 @@ export enum Message {
   INTERNET_GAME_CONFIGURATION_CHANGED = "INTERNET_GAME_CONFIGURATION_CHANGED"
 }
 
+export type FilterFn = (
+  rootValue?: any,
+  args?: any,
+  context?: any,
+  info?: any
+) => boolean | Promise<boolean>;
+
 export type PubSub = {
   publish: (eventName: string, payload: any) => boolean;
   subscribe: (eventName: string) => SubscriptionResolveFn<any, any, any, any>;
+  // withFilter: (
+  //   asyncIteratorFn: SubscriptionResolveFn<any, any, any, any>,
+  //   filterFn: FilterFn
+  // ) => SubscriptionResolveFn<any, any, any, any>;
 };
 
 export function subscribeGame(

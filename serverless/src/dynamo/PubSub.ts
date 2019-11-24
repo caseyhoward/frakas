@@ -49,5 +49,11 @@ export function create(
         return result(rootValue, args, context, info);
       };
     }
+    // withFilter: <
+    //   (
+    //     asyncIteratorFn: PubSub.SubscriptionResolveFunction,
+    //     filterFn: GraphqlSubscriptions.FilterFn
+    //   ) => PubSub.SubscriptionResolveFunction
+    // >(<unknown>AwsLambdaGraphql.withFilter)
   };
 }

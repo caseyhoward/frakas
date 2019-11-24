@@ -1,9 +1,9 @@
 import { makeExecutableSchema, IResolvers } from "graphql-tools";
-import * as PubSub from "fracas-shared/src/PubSub";
+import * as PubSub from "fracas-core/src/PubSub";
 import * as Graphql from "../Graphql";
 import * as graphql from "graphql";
-import * as Resolvers from "fracas-shared/src/Resolvers";
-import * as Repository from "fracas-shared/src/Repository";
+import * as Resolvers from "fracas-core/src/Resolvers";
+import * as Repository from "fracas-core/src/Repository";
 
 export function create(
   repository: Repository.Repository,

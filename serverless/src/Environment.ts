@@ -18,7 +18,7 @@ export type NoDynamoDbEnvironmentOptions = {
 
 export type DynamoDbEnvironmentOptions = {
   type: "DynamoDbEnvironmentOptions";
-  endpoint?: string;
+  endpoint: string;
   region: string;
 };
 
