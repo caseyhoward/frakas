@@ -9,6 +9,7 @@ node_js:
 install:
   - npm install -g typescript@3.7.2
   - cd serverless && npm install && cd ..
+  - cd core && npm install && cd ..
 
 jobs:
   include:
