@@ -13,6 +13,7 @@ import { WebSocketLink } from "apollo-link-ws";
 import gql from "graphql-tag";
 import { DocumentNode } from "graphql";
 import ws from "ws";
+import * as Helpers from "./helpers";
 
 // jest.setTimeout(15000);
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
@@ -27,39 +28,31 @@ const graphqlSubscriptionUrl = EnvironmentVariable.getString(
 //   "https://4gw6frk910.execute-api.us-east-1.amazonaws.com/test/graphql";
 
 describe("chat example", () => {
-  for (let i = 0; i < 100; ++i) {
+  for (let i = 0; i < 21; ++i) {
     it("works with subscription client " + i, async () => {
-      const apolloClient = await createApolloClient();
+      const subscriptionClient = await createSubscriptionClient();
+      // const apolloClient = await createApolloClient(subscriptionClient);
 
-      const observable = apolloClient.subscribe({
+      const iterator = Helpers.subscribe({
+        client: subscriptionClient,
         query: subscriptionOperation()
       });
 
-      const promise: Promise<any> = new Promise((resolve, reject) => {
-        observable.subscribe({
-          next(data) {
-            resolve(data);
-          },
-          error(error) {
-            reject(error);
-          }
-        });
-      }).catch(error => {
-        console.error(error);
-      });
-
-      // TODO: Can't await this promise or it hangs for some reason
-      sendMessage(apolloClient, "hello");
-      const subscribeResult = await promise;
-      expect(subscribeResult.data.messageFeed.text).toEqual("hello");
-      apolloClient.stop();
+      await sendMessage(subscriptionClient, "hello");
+      await new Promise(r => setTimeout(r, 1000));
+      // const subscribeResult = await promise;
+      const x = iterator.next();
+      console.log(JSON.stringify(x));
+      expect(x.value.data.messageFeed.text).toEqual("hello");
+      expect(x.done).toEqual(false);
+      subscriptionClient.close();
     });
   }
 });
 
-async function createApolloClient(): Promise<
-  ApolloClient<NormalizedCacheObject>
-> {
+async function createApolloClient(
+  subscriptionClient: SubscriptionClient
+): Promise<ApolloClient<NormalizedCacheObject>> {
   // const fragmentMatcher = new IntrospectionFragmentMatcher({
   //   introspectionQueryResultData: {
   //     __schema: {
@@ -67,19 +60,6 @@ async function createApolloClient(): Promise<
   //     }
   //   }
   // });
-  const subscriptionClient = new SubscriptionClient(
-    graphqlSubscriptionUrl,
-    {
-      lazy: false,
-      reconnect: true
-    },
-    ws,
-    []
-  );
-
-  await new Promise(resolve => {
-    subscriptionClient.onConnected(resolve);
-  });
 
   const link = new WebSocketLink(subscriptionClient);
 
@@ -102,7 +82,7 @@ function subscriptionOperation(): DocumentNode {
 }
 
 function sendMessage(
-  apolloClient: ApolloClient<NormalizedCacheObject>,
+  subscriptionClient: SubscriptionClient,
   message: string
 ): Promise<any> {
   const mutation = gql`
@@ -112,10 +92,24 @@ function sendMessage(
       }
     }
   `;
-  return apolloClient.mutate({
-    mutation,
-    variables: { message: message },
-    fetchPolicy: "no-cache",
-    errorPolicy: "all"
+
+  return Helpers.execute({
+    client: subscriptionClient,
+    query: mutation,
+    variables: { message: message }
   });
+}
+
+async function createSubscriptionClient(): Promise<SubscriptionClient> {
+  const subscriptionClient = new SubscriptionClient(
+    graphqlSubscriptionUrl,
+    {
+      lazy: false,
+      reconnect: true
+    },
+    ws,
+    []
+  );
+  await Helpers.waitForClientToConnect(subscriptionClient);
+  return subscriptionClient;
 }
