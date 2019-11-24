@@ -28,7 +28,7 @@ const graphqlSubscriptionUrl = EnvironmentVariable.getString(
 //   "https://4gw6frk910.execute-api.us-east-1.amazonaws.com/test/graphql";
 
 describe("chat example", () => {
-  for (let i = 0; i < 100; ++i) {
+  for (let i = 0; i < 20; ++i) {
     it("works with subscription client " + i, async () => {
       const subscriptionClient = await createSubscriptionClient();
       // const apolloClient = await createApolloClient(subscriptionClient);
@@ -109,5 +109,6 @@ async function createSubscriptionClient(): Promise<SubscriptionClient> {
     []
   );
   await Helpers.waitForClientToConnect(subscriptionClient);
+  await new Promise(resolve => setTimeout(resolve, 100));
   return subscriptionClient;
 }
