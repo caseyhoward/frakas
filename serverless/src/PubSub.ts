@@ -1,0 +1,21 @@
+import * as AwsLambdaGraphql from "aws-lambda-graphql";
+import * as PubSub from "fracas-core/src/PubSub";
+
+export function create(
+  eventStore: AwsLambdaGraphql.DynamoDBEventStore
+): PubSub.PubSub {
+  const awsLambdaGraphqlPubSub = new AwsLambdaGraphql.PubSub({ eventStore });
+  return {
+    publish(triggerName: string, payload: any): boolean {
+      console.log("publish", triggerName, payload);
+      awsLambdaGraphqlPubSub.publish(triggerName, payload);
+      return true;
+    },
+    subscribe: eventName => {
+      return (rootValue, args, context, info) => {
+        const result = awsLambdaGraphqlPubSub.subscribe(eventName);
+        return result(rootValue, args, context, info);
+      };
+    }
+  };
+}
