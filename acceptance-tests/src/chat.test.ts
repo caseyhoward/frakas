@@ -15,6 +15,7 @@ import { DocumentNode } from "graphql";
 import ws from "ws";
 
 // jest.setTimeout(15000);
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
 
 // const graphqlSubscriptionUrl = "ws://localhost:4003";
 // const graphqlHttpUrl = "http://localhost:4002/graphql";
