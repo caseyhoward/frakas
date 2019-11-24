@@ -28,7 +28,7 @@ const graphqlSubscriptionUrl = EnvironmentVariable.getString(
 //   "https://4gw6frk910.execute-api.us-east-1.amazonaws.com/test/graphql";
 
 describe("chat example", () => {
-  for (let i = 0; i < 21; ++i) {
+  for (let i = 0; i < 100; ++i) {
     it("works with subscription client " + i, async () => {
       const subscriptionClient = await createSubscriptionClient();
       // const apolloClient = await createApolloClient(subscriptionClient);
@@ -39,36 +39,34 @@ describe("chat example", () => {
       });
 
       await sendMessage(subscriptionClient, "hello");
-      await new Promise(r => setTimeout(r, 1000));
-      // const subscribeResult = await promise;
-      const x = iterator.next();
-      console.log(JSON.stringify(x));
-      expect(x.value.data.messageFeed.text).toEqual("hello");
-      expect(x.done).toEqual(false);
-      subscriptionClient.close();
+      return Eventually.eventually(async () => {
+        const result = iterator.next();
+        expect(result.value.data.messageFeed.text).toEqual("hello");
+        subscriptionClient.close();
+      });
     });
   }
 });
 
-async function createApolloClient(
-  subscriptionClient: SubscriptionClient
-): Promise<ApolloClient<NormalizedCacheObject>> {
-  // const fragmentMatcher = new IntrospectionFragmentMatcher({
-  //   introspectionQueryResultData: {
-  //     __schema: {
-  //       types: []
-  //     }
-  //   }
-  // });
+// async function createApolloClient(
+//   subscriptionClient: SubscriptionClient
+// ): Promise<ApolloClient<NormalizedCacheObject>> {
+//   // const fragmentMatcher = new IntrospectionFragmentMatcher({
+//   //   introspectionQueryResultData: {
+//   //     __schema: {
+//   //       types: []
+//   //     }
+//   //   }
+//   // });
 
-  const link = new WebSocketLink(subscriptionClient);
+//   const link = new WebSocketLink(subscriptionClient);
 
-  return new ApolloClient({
-    // cache: new InMemoryCache({ fragmentMatcher }),
-    cache: new InMemoryCache(),
-    link
-  });
-}
+//   return new ApolloClient({
+//     // cache: new InMemoryCache({ fragmentMatcher }),
+//     cache: new InMemoryCache(),
+//     link
+//   });
+// }
 
 function subscriptionOperation(): DocumentNode {
   return gql`

@@ -8,9 +8,10 @@ export async function eventually<T = void>(
   try {
     return await block();
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     const elapsedTime = new Date().getTime() - startTime;
     if (elapsedTime < timeoutSeconds * 1000) {
+      await new Promise(resolve => setTimeout(resolve, 100));
       return eventually(block, timeoutSeconds, startTime);
     } else {
       throw error;
