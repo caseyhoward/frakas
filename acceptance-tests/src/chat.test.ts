@@ -65,10 +65,7 @@ function createApolloClient(): ApolloClient<NormalizedCacheObject> {
   // });
   const subscriptionClient = new SubscriptionClient(
     graphqlSubscriptionUrl,
-    {
-      lazy: false,
-      reconnect: true
-    },
+    {},
     ws,
     []
   );
