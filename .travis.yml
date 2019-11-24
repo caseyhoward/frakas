@@ -14,8 +14,8 @@ jobs:
   include:
     #   - stage: compile
     #     script: ./bin/compile.sh
-    - stage: test
-      script: ./bin/test.sh
+    # - stage: test
+    #   script: ./bin/test.sh
     - stage: deploy-pull-request
       script: bin/compile.sh && cd serverless && bin/deploy-pull-request.sh && cd ..
     - stage: acceptance-test
@@ -25,7 +25,7 @@ jobs:
 
 stages:
   # - name: compile # TODO: Use s3 for build artifacts and pass compiled code to other stages instead of recompiling
-  - name: test
+  # - name: test
   - name: deploy
     if: branch = master AND type = push AND fork = false
   - name: deploy-pull-request
