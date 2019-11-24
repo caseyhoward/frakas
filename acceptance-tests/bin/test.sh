@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 
-cd serverless && bin/test.sh
+npm install
 npm run jasmine
