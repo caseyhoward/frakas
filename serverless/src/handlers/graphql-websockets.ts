@@ -12,65 +12,11 @@ import {
 } from "aws-lambda-graphql";
 import * as assert from "assert";
 import { makeExecutableSchema } from "graphql-tools";
-import { ulid } from "ulid";
 import * as Environment from "../Environment";
 import * as Graphql from "../Graphql";
 import * as Resolvers from "../Resolvers";
 
 const environment: Environment.Environment = Environment.create();
-
-const eventStore = new DynamoDBEventStore({
-  eventsTable: `Events${environment.tableNameSuffix}`
-});
-const pubSub = new PubSub({ eventStore });
-
-// type MessageType = "greeting" | "test";
-
-// type Message = {
-//   id: string;
-//   text: string;
-//   type: MessageType;
-// };
-
-// type SendMessageArgs = {
-//   text: string;
-//   type: MessageType;
-// };
-
-// const schema = makeExecutableSchema({
-//   typeDefs: Graphql.typeDefs,
-//   resolvers: {
-//     Mutation: {
-//       async sendMessage(rootValue: any, { text, type }: SendMessageArgs) {
-//         assert.ok(text.length > 0 && text.length < 100);
-//         const payload: Message = { id: ulid(), text, type };
-
-//         await pubSub.publish("NEW_MESSAGE", payload);
-
-//         return payload;
-//       }
-//     },
-//     Subscription: {
-//       messageFeed: {
-//         resolve: (rootValue: Message) => {
-//           // root value is the payload from sendMessage mutation
-//           return rootValue;
-//         },
-//         subscribe: withFilter(
-//           pubSub.subscribe("NEW_MESSAGE"),
-//           (rootValue: Message, args: { type: null | MessageType }) => {
-//             // this can be async too :)
-//             if (args.type == null) {
-//               return true;
-//             }
-
-//             return args.type === rootValue.type;
-//           }
-//         )
-//       }
-//     }
-//   } as any
-// });
 
 const schema = makeExecutableSchema({
   typeDefs: Graphql.typeDefs,

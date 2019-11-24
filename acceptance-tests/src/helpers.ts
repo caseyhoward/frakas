@@ -1,7 +1,6 @@
 // https://github.com/michalkvasnicak/aws-lambda-graphql/blob/master/packages/aws-lambda-graphql/src/fixtures/helpers.ts
 
 import { GraphQLRequest, ExecutionResult } from "apollo-link";
-// import { Client } from "../client";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 
 export function waitForClientToConnect(client: SubscriptionClient) {

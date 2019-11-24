@@ -64,11 +64,8 @@ export function create(): IResolvers<any, any> {
   return {
     Mutation: {
       async sendMessage(rootValue: any, { text, type }: SendMessageArgs) {
-        // assert.ok(text.length > 0 && text.length < 100);
         const payload: Message = { id: ulid(), text, type };
-
         await pubSub.publish("NEW_MESSAGE", payload);
-
         return payload;
       }
     },
@@ -81,11 +78,9 @@ export function create(): IResolvers<any, any> {
         subscribe: withFilter(
           pubSub.subscribe("NEW_MESSAGE"),
           (rootValue: Message, args: { type: null | MessageType }) => {
-            // this can be async too :)
             if (args.type == null) {
               return true;
             }
-
             return args.type === rootValue.type;
           }
         )

@@ -56,8 +56,8 @@ provider:
       Resource: !GetAtt SubscriptionOperationsDynamoDBTable.Arn
 
 functions:
-  mainHandler:
-    handler: build/src/handlers/graphql.handler
+  graphql-websockets:
+    handler: build/src/handlers/graphql-websockets.handler
     events:
       - websocket:
           route: $connect
@@ -68,6 +68,17 @@ functions:
           type: dynamodb
           arn:
             Fn::GetAtt: [EventsDynamoDBTable, StreamArn]
+  # graphql-http:
+  #   handler: src/handlers/graphql-http.handler
+  #   events:
+  #     - http:
+  #         path: graphql
+  #         method: post
+  #         cors: true
+  #     - http:
+  #         path: graphql
+  #         method: get
+  #         cors: true
 
 resources:
   Resources:
