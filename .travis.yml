@@ -18,8 +18,8 @@ jobs:
       script: ./bin/test.sh
     - stage: deploy-pull-request
       script: bin/compile.sh && cd serverless && bin/deploy-pull-request.sh && cd ..
-    # - stage: acceptance-test
-    #   script: ./bin/acceptance-test.sh
+    - stage: acceptance-test
+      script: ./bin/acceptance-test.sh
     - stage: deploy
       script: ./bin/deploy.sh
 
@@ -30,5 +30,5 @@ stages:
     if: branch = master AND type = push AND fork = false
   - name: deploy-pull-request
     if: type = pull_request
-  # - name: acceptance-test
-  #   if: type = pull_request
+  - name: acceptance-test
+    if: type = pull_request
