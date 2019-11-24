@@ -6,16 +6,13 @@ import {
   createWsHandler,
   DynamoDBConnectionManager,
   DynamoDBEventStore,
-  DynamoDBSubscriptionManager,
-  // PubSub,
-  withFilter
+  DynamoDBSubscriptionManager
 } from "aws-lambda-graphql";
-import * as assert from "assert";
 import { makeExecutableSchema } from "graphql-tools";
 import * as Environment from "../Environment";
 import * as Graphql from "../Graphql";
 import * as Resolvers from "../Resolvers";
-import * as PubSub from "../PubSub";
+import * as PubSub from "../dynamo/PubSub";
 
 const environment: Environment.Environment = Environment.create();
 
