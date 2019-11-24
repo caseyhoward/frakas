@@ -7,7 +7,7 @@ import {
   DynamoDBConnectionManager,
   DynamoDBEventStore,
   DynamoDBSubscriptionManager,
-  PubSub,
+  // PubSub,
   withFilter
 } from "aws-lambda-graphql";
 import * as assert from "assert";
@@ -15,12 +15,19 @@ import { makeExecutableSchema } from "graphql-tools";
 import * as Environment from "../Environment";
 import * as Graphql from "../Graphql";
 import * as Resolvers from "../Resolvers";
+import * as PubSub from "../PubSub";
 
 const environment: Environment.Environment = Environment.create();
 
+const eventStore = new DynamoDBEventStore({
+  eventsTable: `Events${environment.tableNameSuffix}`
+});
+
+const pubSub = PubSub.create(eventStore);
+
 const schema = makeExecutableSchema({
   typeDefs: Graphql.typeDefs,
-  resolvers: Resolvers.create()
+  resolvers: Resolvers.create(pubSub)
 });
 
 const subscriptionManager = new DynamoDBSubscriptionManager({

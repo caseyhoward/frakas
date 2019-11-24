@@ -1,4 +1,5 @@
 import * as Models from "./Models";
+import { SubscriptionResolveFn } from "./api/graphql";
 
 export enum Message {
   INTERNET_GAME_CHANGED = "INTERNET_GAME_CHANGED",
@@ -7,20 +8,24 @@ export enum Message {
 
 export type PubSub = {
   publish: (eventName: string, payload: any) => boolean;
-  subscribe: (eventName: string) => SubscriptionResolver;
+  subscribe: (eventName: string) => SubscriptionResolveFn<any, any, any, any>;
 };
 
-export function subscribeGame(pubSub: PubSub): SubscriptionResolver {
+export function subscribeGame(
+  pubSub: PubSub
+): SubscriptionResolveFn<any, any, any, any> {
   return pubSub.subscribe(Message.INTERNET_GAME_CHANGED);
 }
 
-export function subscribeTest(pubSub: PubSub): SubscriptionResolver {
+export function subscribeTest(
+  pubSub: PubSub
+): SubscriptionResolveFn<any, any, any, any> {
   return pubSub.subscribe("TEST");
 }
 
 export function subscribeGameConfiguration(
   pubSub: PubSub
-): SubscriptionResolver {
+): SubscriptionResolveFn<any, any, any, any> {
   console.log("subscribe game configuration");
   return pubSub.subscribe(Message.INTERNET_GAME_CONFIGURATION_CHANGED);
 }
@@ -42,9 +47,9 @@ export function gameConfigurationChanged(pubSub: PubSub) {
   pubSub.publish(Message.INTERNET_GAME_CONFIGURATION_CHANGED, {});
 }
 
-export type SubscriptionResolver = (
-  rootValue: any,
-  args: any,
-  context: any,
-  info: any
-) => Promise<AsyncIterator<any>> | AsyncIterator<any>;
+// export type SubscriptionResolver = (
+//   rootValue: any,
+//   args: any,
+//   context: any,
+//   info: any
+// ) => Promise<AsyncIterator<any>> | AsyncIterator<any>;

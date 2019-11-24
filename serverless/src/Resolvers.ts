@@ -17,7 +17,7 @@ import {
   DynamoDBConnectionManager,
   DynamoDBEventStore,
   DynamoDBSubscriptionManager,
-  PubSub,
+  // PubSub,
   withFilter
 } from "aws-lambda-graphql";
 
@@ -37,6 +37,7 @@ import {
 // import * as SubscriptionGame from "./resolvers/Subscription/game";
 // import * as SubscriptionGameOrConfiguration from "./resolvers/Subscription/gameOrConfiguration";
 // import * as PubSub from "./PubSub";
+import * as PubSub from "fracas-core/src/PubSub";
 
 type MessageType = "greeting" | "test";
 
@@ -53,14 +54,10 @@ type SendMessageArgs = {
 
 const environment: Environment.Environment = Environment.create();
 
-const eventStore = new DynamoDBEventStore({
-  eventsTable: `Events${environment.tableNameSuffix}`
-});
-const pubSub = new PubSub({ eventStore });
-
-export function create(): IResolvers<any, any> {
+export function create(
   // repository: Repository.Repository,
-  // pubsub: PubSub.PubSub
+  pubSub: PubSub.PubSub
+): IResolvers<any, any> {
   return {
     Mutation: {
       async sendMessage(rootValue: any, { text, type }: SendMessageArgs) {
