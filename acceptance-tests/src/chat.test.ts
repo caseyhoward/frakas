@@ -29,7 +29,7 @@ const graphqlSubscriptionUrl = EnvironmentVariable.getString(
 describe("chat example", () => {
   for (let i = 0; i < 100; ++i) {
     it("works with subscription client " + i, async () => {
-      const apolloClient = createApolloClient();
+      const apolloClient = await createApolloClient();
 
       const observable = apolloClient.subscribe({
         query: subscriptionOperation()
@@ -57,7 +57,9 @@ describe("chat example", () => {
   }
 });
 
-function createApolloClient(): ApolloClient<NormalizedCacheObject> {
+async function createApolloClient(): Promise<
+  ApolloClient<NormalizedCacheObject>
+> {
   // const fragmentMatcher = new IntrospectionFragmentMatcher({
   //   introspectionQueryResultData: {
   //     __schema: {
@@ -74,6 +76,10 @@ function createApolloClient(): ApolloClient<NormalizedCacheObject> {
     ws,
     []
   );
+
+  await new Promise(resolve => {
+    subscriptionClient.onConnected(resolve);
+  });
 
   const link = new WebSocketLink(subscriptionClient);
 
