@@ -27,32 +27,34 @@ const graphqlSubscriptionUrl = EnvironmentVariable.getString(
 //   "https://4gw6frk910.execute-api.us-east-1.amazonaws.com/test/graphql";
 
 describe("chat example", () => {
-  it("works with subscription client", async () => {
-    const apolloClient = createApolloClient();
+  for (let i = 0; i < 100; ++i) {
+    it("works with subscription client " + i, async () => {
+      const apolloClient = createApolloClient();
 
-    const observable = apolloClient.subscribe({
-      query: subscriptionOperation()
-    });
-
-    const promise: Promise<any> = new Promise((resolve, reject) => {
-      observable.subscribe({
-        next(data) {
-          resolve(data);
-        },
-        error(error) {
-          reject(error);
-        }
+      const observable = apolloClient.subscribe({
+        query: subscriptionOperation()
       });
-    }).catch(error => {
-      console.error(error);
-    });
 
-    // TODO: Can't await this promise or it hangs for some reason
-    sendMessage(apolloClient, "hello");
-    const subscribeResult = await promise;
-    expect(subscribeResult.data.messageFeed.text).toEqual("hello");
-    apolloClient.stop();
-  });
+      const promise: Promise<any> = new Promise((resolve, reject) => {
+        observable.subscribe({
+          next(data) {
+            resolve(data);
+          },
+          error(error) {
+            reject(error);
+          }
+        });
+      }).catch(error => {
+        console.error(error);
+      });
+
+      // TODO: Can't await this promise or it hangs for some reason
+      sendMessage(apolloClient, "hello");
+      const subscribeResult = await promise;
+      expect(subscribeResult.data.messageFeed.text).toEqual("hello");
+      apolloClient.stop();
+    });
+  }
 });
 
 function createApolloClient(): ApolloClient<NormalizedCacheObject> {
@@ -65,7 +67,10 @@ function createApolloClient(): ApolloClient<NormalizedCacheObject> {
   // });
   const subscriptionClient = new SubscriptionClient(
     graphqlSubscriptionUrl,
-    {},
+    {
+      lazy: false,
+      reconnect: true
+    },
     ws,
     []
   );
