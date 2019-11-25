@@ -1,0 +1,13 @@
+diff --git a/node_modules/subscriptions-transport-ws/dist/client.js b/node_modules/subscriptions-transport-ws/dist/client.js
+index 50a105d..216644f 100644
+--- a/node_modules/subscriptions-transport-ws/dist/client.js
++++ b/node_modules/subscriptions-transport-ws/dist/client.js
+@@ -424,7 +424,7 @@ var SubscriptionClient = (function () {
+     };
+     SubscriptionClient.prototype.connect = function () {
+         var _this = this;
+-        this.client = new this.wsImpl(this.url, this.wsProtocols);
++        this.client = new this.wsImpl(this.url);
+         this.checkMaxConnectTimeout();
+         this.client.onopen = function () { return __awaiter(_this, void 0, void 0, function () {
+             var connectionParams, error_1;
