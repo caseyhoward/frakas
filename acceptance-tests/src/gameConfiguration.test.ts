@@ -52,7 +52,7 @@ describe("blah", () => {
       const result = iterator.next();
       expect(result.value.data.gameOrConfiguration.players.length).toEqual(2);
       subscriptionClient.close();
-    });
+    }, 5);
   });
 });
 
