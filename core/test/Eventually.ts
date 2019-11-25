@@ -11,7 +11,7 @@ export async function eventually<T = void>(
     // console.log(error);
     const elapsedTime = new Date().getTime() - startTime;
     if (elapsedTime < timeoutSeconds * 1000) {
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 200));
       return eventually(block, timeoutSeconds, startTime);
     } else {
       throw error;

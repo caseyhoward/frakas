@@ -29,17 +29,17 @@ describe("Game configuration", () => {
       });
 
       const joinToken = await getJoinToken(hostToken);
-      const newPlayerToken = await joinGame(joinToken);
 
       await Eventually.eventually(async () => {
+        const newPlayerToken = await joinGame(joinToken);
         const result = iterator.next();
-        console.log(result);
         // TODO: Fix this
         expect([1, 2]).toContain(
           result.value.data.gameOrConfiguration.players.length
         );
       }, 10);
 
+      subscriptionClient.unsubscribeAll();
       subscriptionClient.close();
     });
   }
