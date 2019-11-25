@@ -116,10 +116,10 @@ export function create(
         },
         subscribe: PubSub.subscribeGame(pubsub)
       },
-      test: {
-        subscribe: PubSub.subscribeTest(pubsub),
-        resolve: () => true
-      },
+      // test: {
+      //   subscribe: PubSub.subscribeTest(pubsub),
+      //   resolve: () => true
+      // },
       messageFeed: {
         resolve: (rootValue: Message) => {
           // root value is the payload from sendMessage mutation
@@ -161,11 +161,11 @@ export function createWithoutSubscriptions(
           repository.findGameIdAndPlayerIdByToken,
           repository.findGameById,
           input
-        ),
-      test: async () => {
-        pubsub.publish("TEST", { abc: 123 });
-        return true;
-      }
+        )
+      // test: async () => {
+      //   pubsub.publish("TEST", { abc: 123 });
+      //   return true;
+      // }
     },
     Mutation: {
       async sendMessage(rootValue: any, { text, type }: SendMessageArgs) {

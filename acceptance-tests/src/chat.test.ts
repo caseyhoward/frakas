@@ -44,6 +44,7 @@ describe("chat example", () => {
       return Eventually.eventually(async () => {
         await sendMessage(subscriptionClient, message);
         const result = iterator.next();
+        console.log("******************* Got result ", result);
         expect(result.value.data.messageFeed.text).toEqual(message);
         subscriptionClient.close();
       }, 5);
