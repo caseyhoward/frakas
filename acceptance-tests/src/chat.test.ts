@@ -113,6 +113,5 @@ async function createSubscriptionClient(): Promise<SubscriptionClient> {
     []
   );
   await Helpers.waitForClientToConnect(subscriptionClient);
-  await new Promise(resolve => setTimeout(resolve, 200));
   return subscriptionClient;
 }
