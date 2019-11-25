@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+set -x
+set -e
+
 export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_DEV}
 export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_DEV}
 
@@ -13,6 +16,6 @@ serverless info --verbose --stage pr-${TRAVIS_PULL_REQUEST} | grep ^ServiceEndpo
 export FRACAS_HTTP_ENDPOINT=$(cat FRACAS_HTTP_ENDPOINT.txt)/graphql
 
 curl -H "Authorization: token ${GITHUB_TOKEN}" -X POST \
--d "{\"body\": \"Deployed ${TRAVIS_PULL_REQUEST_SHA}\nHttp endpoint: ${FRACAS_HTTP_ENDPOINT}\nWebsocket endpoint: ${FRACAS_WEBSOCKET_ENDPOINT}\"}" \
+-d "{\"body\": \"Deployed ${TRAVIS_PULL_REQUEST_SHA}\nHTTP Endpoint: ${FRACAS_HTTP_ENDPOINT}\nWebsocket Endpoint: ${FRACAS_WEBSOCKET_ENDPOINT}\"}" \
 "https://api.github.com/repos/${TRAVIS_REPO_SLUG}/issues/${TRAVIS_PULL_REQUEST}/comments"
 cd ..
