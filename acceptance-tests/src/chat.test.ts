@@ -41,13 +41,14 @@ describe("chat example", () => {
       const timestamp = new Date().getTime();
       const message = `hello-${timestamp}`;
 
-      return Eventually.eventually(async () => {
+      await Eventually.eventually(async () => {
         await sendMessage(subscriptionClient, JSON.stringify(message));
         const result = iterator.next();
         console.log("******************* Got result ", result);
         expect(result.value.data.messageFeed.text).toEqual(message);
-        subscriptionClient.close();
       }, 5);
+
+      subscriptionClient.close();
     });
   }
 });
