@@ -43,7 +43,7 @@ describe("chat example", () => {
         const result = iterator.next();
         expect(result.value.data.messageFeed.text).toEqual("hello");
         subscriptionClient.close();
-      });
+      }, 5);
     });
   }
 });

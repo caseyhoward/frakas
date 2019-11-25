@@ -20,7 +20,7 @@ const graphqlSubscriptionUrl = EnvironmentVariable.getString(
 );
 
 const graphqlHttpUrl = EnvironmentVariable.getString("FRACAS_HTTP_ENDPOINT");
-
+console.log(graphqlHttpUrl);
 // const graphqlSubscriptionUrl = "ws://localhost:4003";
 // const graphqlHttpUrl = "http://localhost:4002/graphql";
 
@@ -60,6 +60,7 @@ async function createGame(): Promise<string> {
   const responseBody = await postGraphql(
     '{"query":"mutation {\\n  createGame: createGame\\n}"}'
   );
+  console.log(responseBody);
   return responseBody["createGame"];
 }
 
@@ -92,7 +93,7 @@ async function postGraphql(body: string): Promise<any> {
     method: "POST"
   });
   const responseBody = response.body.read().toString();
-  // console.log(responseBody);
+  console.log(responseBody);
   return JSON.parse(responseBody)["data"];
 }
 
@@ -152,13 +153,13 @@ function subscriptionOperation(playerToken: string): DocumentNode {
   }`;
 }
 
-function testSubscriptionOperation(): DocumentNode {
-  return gql`
-    subscription {
-      test: test
-    }
-  `;
-}
+// function testSubscriptionOperation(): DocumentNode {
+//   return gql`
+//     subscription {
+//       test: test
+//     }
+//   `;
+// }
 
 async function createSubscriptionClient(): Promise<SubscriptionClient> {
   const subscriptionClient = new SubscriptionClient(
