@@ -9,26 +9,27 @@ node_js:
 install:
   - npm install -g typescript@3.7.2
   - cd serverless && npm install && cd ..
+  - cd core && npm install && cd ..
 
 jobs:
   include:
     #   - stage: compile
     #     script: ./bin/compile.sh
-    - stage: test
-      script: ./bin/test.sh
+    # - stage: test
+    #   script: ./bin/test.sh
     - stage: deploy-pull-request
-      script: bin/compile.sh && cd serverless && bin/deploy-pull-request.sh && cd ..
-    # - stage: acceptance-test
-    #   script: ./bin/acceptance-test.sh
+      script: bin/compile.sh && bin/deploy-pull-request.sh
+    - stage: acceptance-test
+      script: ./bin/acceptance-test.sh
     - stage: deploy
       script: ./bin/deploy.sh
 
 stages:
   # - name: compile # TODO: Use s3 for build artifacts and pass compiled code to other stages instead of recompiling
-  - name: test
+  # - name: test
   - name: deploy
     if: branch = master AND type = push AND fork = false
   - name: deploy-pull-request
     if: type = pull_request
-  # - name: acceptance-test
-  #   if: type = pull_request
+  - name: acceptance-test
+    if: type = pull_request

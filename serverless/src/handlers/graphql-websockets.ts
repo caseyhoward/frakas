@@ -6,94 +6,33 @@ import {
   createWsHandler,
   DynamoDBConnectionManager,
   DynamoDBEventStore,
-  DynamoDBSubscriptionManager,
-  PubSub,
-  withFilter
+  DynamoDBSubscriptionManager
 } from "aws-lambda-graphql";
-import * as assert from "assert";
 import { makeExecutableSchema } from "graphql-tools";
-import { ulid } from "ulid";
 import * as Environment from "../Environment";
+import * as Graphql from "../Graphql";
+import * as Resolvers from "fracas-core/src/Resolvers";
+import * as PubSub from "../dynamo/PubSub";
+import * as Repository from "../dynamo/Repository";
+import * as Database from "../dynamo/Database";
 
 const environment: Environment.Environment = Environment.create();
 
 const eventStore = new DynamoDBEventStore({
   eventsTable: `Events${environment.tableNameSuffix}`
 });
-const pubSub = new PubSub({ eventStore });
 
-type MessageType = "greeting" | "test";
-
-type Message = {
-  id: string;
-  text: string;
-  type: MessageType;
-};
-
-type SendMessageArgs = {
-  text: string;
-  type: MessageType;
-};
+const pubSub = PubSub.create(eventStore);
 
 const schema = makeExecutableSchema({
-  typeDefs: /* GraphQL */ `
-    enum MessageType {
-      greeting
-      test
-    }
-
-    type Message {
-      id: ID!
-      text: String!
-      type: MessageType!
-    }
-
-    type Mutation {
-      sendMessage(text: String!, type: MessageType = greeting): Message!
-    }
-
-    type Query {
-      serverTime: Float!
-    }
-
-    type Subscription {
-      messageFeed(type: MessageType): Message!
-    }
-  `,
-  resolvers: {
-    Mutation: {
-      async sendMessage(rootValue: any, { text, type }: SendMessageArgs) {
-        assert.ok(text.length > 0 && text.length < 100);
-        const payload: Message = { id: ulid(), text, type };
-
-        await pubSub.publish("NEW_MESSAGE", payload);
-
-        return payload;
-      }
-    },
-    Query: {
-      serverTime: () => Date.now()
-    },
-    Subscription: {
-      messageFeed: {
-        resolve: (rootValue: Message) => {
-          // root value is the payload from sendMessage mutation
-          return rootValue;
-        },
-        subscribe: withFilter(
-          pubSub.subscribe("NEW_MESSAGE"),
-          (rootValue: Message, args: { type: null | MessageType }) => {
-            // this can be async too :)
-            if (args.type == null) {
-              return true;
-            }
-
-            return args.type === rootValue.type;
-          }
-        )
-      }
-    }
-  } as any
+  typeDefs: Graphql.typeDefs,
+  resolvers: Resolvers.create(
+    Repository.create(
+      `Fracas${environment.tableNameSuffix}`,
+      Database.createFromEnvironment(environment.dynamodb)
+    ),
+    pubSub
+  )
 });
 
 const subscriptionManager = new DynamoDBSubscriptionManager({
