@@ -11,7 +11,6 @@ import {
 import { makeExecutableSchema } from "graphql-tools";
 import * as Environment from "../Environment";
 import * as Graphql from "../Graphql";
-// import * as Resolvers from "../Resolvers";
 import * as Resolvers from "fracas-core/src/Resolvers";
 import * as PubSub from "../dynamo/PubSub";
 import * as Repository from "../dynamo/Repository";

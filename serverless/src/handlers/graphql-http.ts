@@ -8,7 +8,6 @@ import * as ApolloServerLambda from "apollo-server-lambda";
 import * as AwsLambdaGraphql from "aws-lambda-graphql";
 
 const environment: Environment.Environment = Environment.create();
-console.log(environment);
 const eventStore = new AwsLambdaGraphql.DynamoDBEventStore({
   eventsTable: `Events${environment.tableNameSuffix}`
 });

@@ -11,12 +11,14 @@ const graphqlSubscriptionUrl = EnvironmentVariable.getString(
   "FRACAS_WEBSOCKET_ENDPOINT"
 );
 
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+
 const graphqlHttpUrl = EnvironmentVariable.getString("FRACAS_HTTP_ENDPOINT");
 // const graphqlSubscriptionUrl = "ws://localhost:4003";
 // const graphqlHttpUrl = "http://localhost:4002/graphql";
 
 describe("Game configuration", () => {
-  for (let i = 0; i < 20; ++i) {
+  for (let i = 0; i < 10; ++i) {
     it("works " + i, async () => {
       const hostToken = await createGame();
       const subscriptionClient = await createSubscriptionClient();
@@ -36,7 +38,7 @@ describe("Game configuration", () => {
         expect([1, 2]).toContain(
           result.value.data.gameOrConfiguration.players.length
         );
-      }, 5);
+      }, 10);
 
       subscriptionClient.close();
     });
@@ -47,7 +49,6 @@ async function createGame(): Promise<string> {
   const responseBody = await postGraphql(
     '{"query":"mutation {\\n  createGame: createGame\\n}"}'
   );
-  console.log(responseBody);
   return responseBody["createGame"];
 }
 
@@ -79,7 +80,6 @@ async function postGraphql(body: string): Promise<any> {
     method: "POST"
   });
   const responseBody = response.body.read().toString();
-  console.log(responseBody);
   return JSON.parse(responseBody)["data"];
 }
 
