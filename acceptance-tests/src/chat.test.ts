@@ -42,9 +42,10 @@ describe("chat example", () => {
       const message = `hello-${timestamp}`;
 
       await Eventually.eventually(async () => {
-        await sendMessage(subscriptionClient, JSON.stringify(message));
+        await sendMessage(subscriptionClient, message);
         const result = iterator.next();
-        expect(JSON.parse(result.value.data.messageFeed.text)).toEqual(message);
+        console.log(JSON.stringify(result));
+        expect(result.value.data.messageFeed.text).toEqual(message);
       }, 5);
 
       subscriptionClient.close();
