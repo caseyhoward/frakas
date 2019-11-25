@@ -17,6 +17,15 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
+        - dynamodb:Query
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - "Fn::GetAtt": !GetAtt FracasTable.Arn
+    - Effect: Allow
+      Action:
         - execute-api:ManageConnections
       # Resource: "arn:aws:execute-api:*:*:*/development/POST/@connections/*"
       Resource: "arn:aws:execute-api:*:*:**/@connections/*"
