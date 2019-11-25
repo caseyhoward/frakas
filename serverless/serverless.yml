@@ -90,6 +90,25 @@ functions:
 
 resources:
   Resources:
+    FracasTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        TableName: Fracas${self:custom.tableNameSuffix}
+        AttributeDefinitions:
+          - AttributeName: PartitionKey
+            AttributeType: S
+          - AttributeName: SortKey
+            AttributeType: S
+        KeySchema:
+          - AttributeName: PartitionKey
+            KeyType: HASH
+          - AttributeName: SortKey
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        SSESpecification:
+          SSEEnabled: true
+
     ConnectionsDynamoDBTable:
       Type: AWS::DynamoDB::Table
       Properties:

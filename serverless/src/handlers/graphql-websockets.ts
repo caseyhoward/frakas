@@ -11,8 +11,11 @@ import {
 import { makeExecutableSchema } from "graphql-tools";
 import * as Environment from "../Environment";
 import * as Graphql from "../Graphql";
-import * as Resolvers from "../Resolvers";
+// import * as Resolvers from "../Resolvers";
+import * as Resolvers from "fracas-core/src/Resolvers";
 import * as PubSub from "../dynamo/PubSub";
+import * as Repository from "../dynamo/Repository";
+import * as Database from "../dynamo/Database";
 
 const environment: Environment.Environment = Environment.create();
 
@@ -24,7 +27,13 @@ const pubSub = PubSub.create(eventStore);
 
 const schema = makeExecutableSchema({
   typeDefs: Graphql.typeDefs,
-  resolvers: Resolvers.create(pubSub)
+  resolvers: Resolvers.create(
+    Repository.create(
+      `Fracas${environment.tableNameSuffix}`,
+      Database.createFromEnvironment(environment.dynamodb)
+    ),
+    pubSub
+  )
 });
 
 const subscriptionManager = new DynamoDBSubscriptionManager({
