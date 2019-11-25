@@ -55,6 +55,14 @@ provider:
         - dynamodb:PutItem
       Resource: !GetAtt SubscriptionOperationsDynamoDBTable.Arn
 
+package:
+  exclude:
+    - src/**
+    - test/**
+    - bin/**
+    - jest.config.js
+    - tsconfig.json
+
 functions:
   graphql-websockets:
     handler: build/src/handlers/graphql-websockets.handler
@@ -69,7 +77,7 @@ functions:
           arn:
             Fn::GetAtt: [EventsDynamoDBTable, StreamArn]
   graphql-http:
-    handler: src/handlers/graphql-http.handler
+    handler: build/src/handlers/graphql-http.handler
     events:
       - http:
           path: graphql
