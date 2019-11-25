@@ -1,4 +1,4 @@
-// https://github.com/michalkvasnicak/aws-lambda-graphql/blob/master/packages/aws-lambda-graphql/src/fixtures/helpers.ts
+// Adapted from https://github.com/michalkvasnicak/aws-lambda-graphql/blob/master/packages/aws-lambda-graphql/src/fixtures/helpers.ts
 
 import { GraphQLRequest, ExecutionResult } from "apollo-link";
 import { SubscriptionClient } from "subscriptions-transport-ws";
