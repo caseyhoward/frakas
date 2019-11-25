@@ -18,7 +18,7 @@ const graphqlHttpUrl = EnvironmentVariable.getString("FRACAS_HTTP_ENDPOINT");
 // const graphqlHttpUrl = "http://localhost:4002/graphql";
 
 describe("Game configuration", () => {
-  for (let i = 0; i < 10; ++i) {
+  for (let i = 0; i < 1; ++i) {
     it("works " + i, async () => {
       const hostToken = await createGame();
       const subscriptionClient = await createSubscriptionClient();
