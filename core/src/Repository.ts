@@ -61,10 +61,15 @@ export type UpdatePlayerName = (
   gameId: string,
   name: string
 ) => Promise<void>;
+
 export type UpdatePlayerColor = (
   playerId: string,
   gameId: string,
   color: Color.Color
+) => Promise<void>;
+
+export type UpdateGamePlayer = (
+  gamePlayer: Player.PlayerConfiguration
 ) => Promise<void>;
 
 export type Repository = {
@@ -83,6 +88,7 @@ export type Repository = {
   findGameConfigurationById: FindGameConfigurationById;
   updateGameMap: UpdateGameMap;
   updateGame: UpdateGame;
+  updateGamePlayer: UpdateGamePlayer;
   updatePlayerColor: UpdatePlayerColor;
   updatePlayerName: UpdatePlayerName;
   updateGameWithoutMap: UpdateGameWithoutMap;
