@@ -5,6 +5,8 @@ set -e
 
 export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_DEV}
 export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_DEV}
+export BUCKET_NAME=fracas-client-pr-${TRAVIS_PULL_REQUEST}
+export FRACAS_CLIENT_DOMAIN=http://example.com # Only needed to run "serverless info"
 
 cd core && rm -rf node_modules && npm install --production && cd ..
 cd serverless && bin/deploy-pull-request.sh && cd ..
