@@ -9,7 +9,7 @@ export BUCKET_NAME=fracas-client-pr-${TRAVIS_PULL_REQUEST}
 export FRACAS_CLIENT_DOMAIN=http://example.com
 
 # TODO: This only works after the first deployment
-serverless info --verbose --stage pr-${TRAVIS_PULL_REQUEST} | grep ^WebAppCloudFrontDistributionOutput: d| cut -d ' ' -f 2 > CLOUDFRONT_DOMAIN.txt
+serverless info --verbose --stage pr-${TRAVIS_PULL_REQUEST} | grep ^WebAppCloudFrontDistributionOutput: | cut -d ' ' -f 2 > CLOUDFRONT_DOMAIN.txt
 export FRACAS_CLIENT_DOMAIN=$(cat CLOUDFRONT_DOMAIN.txt)
 
 serverless deploy --stage pr-${TRAVIS_PULL_REQUEST}

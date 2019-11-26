@@ -250,4 +250,4 @@ resources:
       Value:
         "Fn::GetAtt": [WebAppCloudFrontDistribution, DomainName]
     WebAppCloudFrontDistributionIdOutput:
-      Value: "!Ref"
+      Value: !Ref WebAppCloudFrontDistribution
