@@ -21,4 +21,4 @@ unzip awscliv2.zip
 sudo ./aws/install
 
 aws2 s3 sync ../client/build/ s3://${BUCKET_NAME}/
-aws2 cloudfront create-invalidation --distribution-id WebApp-${BUCKET_NAME} /*
+# aws2 cloudfront create-invalidation --distribution-id WebApp-${BUCKET_NAME} --paths "/*"

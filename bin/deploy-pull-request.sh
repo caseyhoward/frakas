@@ -16,7 +16,10 @@ export FRACAS_WEBSOCKET_ENDPOINT=$(cat FRACAS_WEBSOCKET_ENDPOINT.txt)
 serverless info --verbose --stage pr-${TRAVIS_PULL_REQUEST} | grep ^ServiceEndpoint: | cut -d ' ' -f 2 > FRACAS_HTTP_ENDPOINT.txt
 export FRACAS_HTTP_ENDPOINT=$(cat FRACAS_HTTP_ENDPOINT.txt)/graphql
 
+serverless info --verbose --stage pr-${TRAVIS_PULL_REQUEST} | grep ^WebAppCloudFrontDistributionOutput: | cut -d ' ' -f 2 > CLOUDFRONT_DOMAIN.txt
+export CLOUDFRONT_DOMAIN=$(cat CLOUDFRONT_DOMAIN.txt)/graphql
+
 curl -H "Authorization: token ${GITHUB_TOKEN}" -X POST \
--d "{\"body\": \"Deployed ${TRAVIS_PULL_REQUEST_SHA}\nHTTP Endpoint: ${FRACAS_HTTP_ENDPOINT}\nWebsocket Endpoint: ${FRACAS_WEBSOCKET_ENDPOINT}\"}" \
+-d "{\"body\": \"Deployed ${TRAVIS_PULL_REQUEST_SHA}\nFrontend URL: https://${CLOUDFRONT_DOMAIN}\nAPI HTTP URL: ${FRACAS_HTTP_ENDPOINT}\nAPI Websocket URL: ${FRACAS_WEBSOCKET_ENDPOINT}\"}" \
 "https://api.github.com/repos/${TRAVIS_REPO_SLUG}/issues/${TRAVIS_PULL_REQUEST}/comments"
 cd ..
