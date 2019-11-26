@@ -80,6 +80,7 @@ async function postGraphql(body: string): Promise<any> {
     method: "POST"
   });
   const responseBody = response.body.read().toString();
+  console.log(responseBody);
   return JSON.parse(responseBody)["data"];
 }
 
