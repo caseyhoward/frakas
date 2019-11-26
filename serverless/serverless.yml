@@ -4,7 +4,7 @@ custom:
   currentStage: ${opt:stage, "dev"}
   tableNameSuffix: ${env:FRACAS_TABLE_NAME_SUFFIX, ""}
   client:
-    bucketName: fracas-client-${env:FRACAS_TABLE_NAME_SUFFIX}
+    bucketName: ${env:BUCKET_NAME}
     distributionFolder: ../client/build
 provider:
   name: aws
