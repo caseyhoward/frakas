@@ -2,19 +2,13 @@ language: node_js
 node_js:
   - "12.13.1"
 
-# before_install:
-#   - sudo apt-get update
-#   - sudo apt-get -y install libxml2-dev
-
 install:
   - bin/install.sh
 
 jobs:
   include:
-    #   - stage: compile
-    #     script: ./bin/compile.sh
-    # - stage: test
-    #   script: ./bin/test.sh
+    #   - stage: build
+    #     script: ./bin/build.sh
     - stage: deploy-pull-request
       script: bin/compile.sh && bin/deploy-pull-request.sh
     - stage: acceptance-test
@@ -23,8 +17,7 @@ jobs:
       script: ./bin/deploy.sh
 
 stages:
-  # - name: compile # TODO: Use s3 for build artifacts and pass compiled code to other stages instead of recompiling
-  # - name: test
+  # - name: build # TODO: Use s3 for build artifacts and pass compiled code to other stages instead of recompiling
   - name: deploy
     if: branch = master AND type = push AND fork = false
   - name: deploy-pull-request

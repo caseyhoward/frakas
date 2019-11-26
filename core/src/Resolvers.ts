@@ -24,8 +24,6 @@ import { ulid } from "ulid";
 
 import { withFilter } from "aws-lambda-graphql";
 
-// import * as PubSub from "fracas-core/src/PubSub";
-
 type MessageType = "greeting" | "test";
 
 type Message = {
@@ -129,10 +127,6 @@ export function createWithoutSubscriptions(
           repository.findGameById,
           input
         )
-      // test: async () => {
-      //   pubsub.publish("TEST", { abc: 123 });
-      //   return true;
-      // }
     },
     Mutation: {
       async sendMessage(rootValue: any, { text, type }: SendMessageArgs) {
