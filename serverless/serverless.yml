@@ -3,7 +3,9 @@ service: frakas
 custom:
   currentStage: ${opt:stage, "dev"}
   tableNameSuffix: ${env:FRACAS_TABLE_NAME_SUFFIX, ""}
-
+  client:
+    bucketName: fracas-client-${env:FRACAS_TABLE_NAME_SUFFIX}
+    distributionFolder: ../client/build
 provider:
   name: aws
   runtime: nodejs12.x
@@ -175,3 +177,6 @@ resources:
             AttributeType: S
         StreamSpecification:
           StreamViewType: NEW_IMAGE
+
+plugins:
+  - serverless-finch

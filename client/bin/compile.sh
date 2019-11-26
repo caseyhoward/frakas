@@ -12,3 +12,4 @@ gunzip elm.gz
 chmod +x elm
 sudo mv elm /usr/local/bin/
 elm-app build
+
