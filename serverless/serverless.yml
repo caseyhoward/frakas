@@ -15,6 +15,7 @@ provider:
 
   environment:
     FRACAS_TABLE_NAME_SUFFIX: ${self:custom.tableNameSuffix}
+    FRACAS_CLIENT_DOMAIN: ${env:FRACAS_CLIENT_DOMAIN}
 
   iamRoleStatements:
     - Effect: Allow
@@ -248,3 +249,5 @@ resources:
     WebAppCloudFrontDistributionOutput:
       Value:
         "Fn::GetAtt": [WebAppCloudFrontDistribution, DomainName]
+    WebAppCloudFrontDistributionIdOutput:
+      Value: "Ref"
