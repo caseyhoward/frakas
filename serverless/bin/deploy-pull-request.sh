@@ -26,8 +26,9 @@ export CLOUDFRONT_DISTRIBUTION_ID=$(cat CLOUDFRONT_DISTRIBUTION_ID.txt)
 cd ../client && elm-app build && cd ../serverless
 
 curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
+unzip awscliv2.zip > /dev/null
 sudo ./aws/install
 
-aws2 s3 sync ../client/build/ s3://${BUCKET_NAME}/
+# TODO: Get rid of output redirect once font-awesome assets are optimized (not uploading everything)
+aws2 s3 sync ../client/build/ s3://${BUCKET_NAME}/ > /dev/null
 aws2 cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths "/*"
