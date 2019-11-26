@@ -32,12 +32,6 @@ export function subscribeGame(
   return pubSub.subscribe(Message.INTERNET_GAME_CHANGED);
 }
 
-export function subscribeTest(
-  pubSub: PubSub
-): SubscriptionResolveFn<any, any, any, any> {
-  return pubSub.subscribe("TEST");
-}
-
 export function subscribeGameConfiguration(
   pubSub: PubSub
 ): SubscriptionResolveFn<any, any, any, any> {

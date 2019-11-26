@@ -48,8 +48,8 @@ export function create(
     updateGameMap: (id: string, mapId: Models.MapId) =>
       GameConfigurationRepository.updateMap(table, id, mapId),
     updateGameWithoutMap: (game: Models.GameWithoutMap) =>
-      GameRepository.saveWithoutMap(table, game)
-    // updateGamePlayer: (player: Player.PlayerConfiguration) =>
-    //   PlayerConfigurationRepository.update(table, player)
+      GameRepository.saveWithoutMap(table, game),
+    updateGamePlayer: (player: Player.PlayerConfiguration) =>
+      PlayerConfigurationRepository.update(table, player)
   };
 }

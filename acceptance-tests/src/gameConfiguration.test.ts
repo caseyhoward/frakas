@@ -20,7 +20,6 @@ const graphqlHttpUrl = EnvironmentVariable.getString("FRACAS_HTTP_ENDPOINT");
 describe("Game configuration", () => {
   for (let i = 0; i < 3; ++i) {
     it("works " + i, async () => {
-      expect(true).toBe(true);
       const hostToken = await createGame();
       const subscriptionClient = await createSubscriptionClient();
 
@@ -49,6 +48,32 @@ describe("Game configuration", () => {
   }
 });
 
+describe("game player update subscription", () => {
+  it("works", async () => {
+    const hostToken = await createGame();
+    const subscriptionClient = await createSubscriptionClient();
+
+    const iterator = Helpers.subscribe({
+      client: subscriptionClient,
+      query: subscribeGamePlayerUpdateOperation(hostToken)
+    });
+
+    const joinToken = await getJoinToken(hostToken);
+    const newPlayerToken = await joinGame(joinToken);
+    await updateGamePlayer(newPlayerToken, "new name");
+
+    await Eventually.eventually(async () => {
+      const result = iterator.next();
+      console.log(JSON.stringify(result));
+      // TODO: Fix this
+      expect(result.value.data.gamePlayer.name).toEqual("new name");
+    }, 3);
+
+    subscriptionClient.unsubscribeAll();
+    subscriptionClient.close();
+  });
+});
+
 async function createGame(): Promise<string> {
   const responseBody = await postGraphql(
     '{"query":"mutation {\\n  createGame: createGame\\n}"}'
@@ -67,6 +92,12 @@ async function joinGame(joinToken: string): Promise<string> {
   const body = `{\"query\":\"mutation {\\n  joinGame: joinGame(joinGameToken: \\\"${joinToken}\\\")\\n}\"}`;
   const responseBody = await postGraphql(body);
   return responseBody["joinGame"];
+}
+
+async function updateGamePlayer(playerToken: string, name: string) {
+  const body = `mutation {
+    updateGamePlayer3518158139: updateGamePlayer(playerToken: \\\"${playerToken}\\\", color: {red: 138, green: 226, blue: 52}, name: \\\"${name}\\\")
+  }`;
 }
 
 async function postGraphql(body: string): Promise<any> {
@@ -116,6 +147,20 @@ function subscriptionOperation(playerToken: string): DocumentNode {
       ...on Game {
         id: id
       }
+    }
+  }`;
+}
+
+function subscribeGamePlayerUpdateOperation(playerToken: string) {
+  return gql`subscription {
+    gamePlayerUpdate385582646: gamePlayerUpdate(playerToken: "${playerToken}") {
+      playerId3832528868: playerId
+      color {
+        red1207450440: red
+        green1207450440: green
+        blue1207450440: blue
+      }
+      name3832528868: name
     }
   }`;
 }

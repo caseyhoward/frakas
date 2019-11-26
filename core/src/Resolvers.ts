@@ -15,6 +15,7 @@ import joinGame from "./resolvers/Mutation/joinGame";
 import startGame from "./resolvers/Mutation/startGame";
 import updateGamePlayerName from "./resolvers/Mutation/updateGamePlayerName";
 import updateGamePlayerColor from "./resolvers/Mutation/updateGamePlayerColor";
+import updateGamePlayer from "./resolvers/Mutation/updateGamePlayer";
 import { updateMapForGame } from "./resolvers/Mutation/updateGameMap";
 import * as SubscriptionGame from "./resolvers/Subscription/game";
 import * as SubscriptionGameOrConfiguration from "./resolvers/Subscription/gameOrConfiguration";
@@ -82,6 +83,10 @@ export function create(
         },
         subscribe: PubSub.subscribeGame(pubsub)
       },
+      gamePlayer: PubSub.subscribeGamePlayerUpdate(
+        pubsub,
+        repository.findGameIdAndPlayerIdByToken
+      ),
       messageFeed: {
         resolve: (rootValue: Message) => {
           // root value is the payload from sendMessage mutation
@@ -173,6 +178,13 @@ export function createWithoutSubscriptions(
           pubsub,
           repository.findGameIdAndPlayerIdByToken,
           repository.updatePlayerColor,
+          input
+        ),
+      updateGamePlayer: (_, input) =>
+        updateGamePlayer(
+          pubsub,
+          repository.findGameIdAndPlayerIdByToken,
+          repository.updateGamePlayer,
           input
         ),
       updateGameMap: (_, input) =>
