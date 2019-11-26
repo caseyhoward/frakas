@@ -1,5 +1,6 @@
 import * as AwsLambdaGraphql from "aws-lambda-graphql";
 import * as GraphqlSubscriptions from "graphql-subscriptions";
+import { SubscriptionResolveFn } from "fracas-core/src/api/graphql";
 import * as PubSub from "fracas-core/src/PubSub";
 
 // export function create(): PubSub.PubSub {
@@ -48,12 +49,12 @@ export function create(
         const result = awsLambdaGraphqlPubSub.subscribe(eventName);
         return result(rootValue, args, context, info);
       };
-    }
-    // withFilter: <
-    //   (
-    //     asyncIteratorFn: PubSub.SubscriptionResolveFunction,
-    //     filterFn: GraphqlSubscriptions.FilterFn
-    //   ) => PubSub.SubscriptionResolveFunction
-    // >(<unknown>AwsLambdaGraphql.withFilter)
+    },
+    withFilter: <
+      (
+        asyncIteratorFn: SubscriptionResolveFn<any, any, any, any>,
+        filterFn: GraphqlSubscriptions.FilterFn
+      ) => SubscriptionResolveFn<any, any, any, any>
+    >(<unknown>AwsLambdaGraphql.withFilter)
   };
 }
