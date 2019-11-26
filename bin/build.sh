@@ -5,4 +5,4 @@ set -e
 
 ./bin/clean.sh
 ./bin/compile.sh
-# ./bin/test.sh
+./bin/test.sh
