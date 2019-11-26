@@ -2,6 +2,7 @@ import * as AwsLambdaGraphql from "aws-lambda-graphql";
 import * as GraphqlSubscriptions from "graphql-subscriptions";
 import { SubscriptionResolveFn } from "fracas-core/src/api/graphql";
 import * as PubSub from "fracas-core/src/PubSub";
+import { SubscriptionResolveFn } from "fracas-core/src/api/graphql";
 
 export function create(
   eventStore: AwsLambdaGraphql.DynamoDBEventStore

@@ -6,6 +6,15 @@ custom:
   currentStage: ${opt:stage, "dev"}
   tableNameSuffix: ${env:FRACAS_TABLE_NAME_SUFFIX, ""}
   webAppBucketName: ${env:BUCKET_NAME}
+  dynamodb:
+    start:
+      host: localhost
+      port: "8000"
+      # noStart: true
+      migrate: true
+    stages:
+      - test
+      - dev
 provider:
   name: aws
   runtime: nodejs12.x
@@ -251,3 +260,6 @@ resources:
         "Fn::GetAtt": [WebAppCloudFrontDistribution, DomainName]
     WebAppCloudFrontDistributionIdOutput:
       Value: !Ref WebAppCloudFrontDistribution
+
+plugins:
+  - serverless-dynamodb-local
