@@ -27,30 +27,31 @@ const graphqlSubscriptionUrl = EnvironmentVariable.getString(
 // const graphqlHttpUrl =
 //   "https://4gw6frk910.execute-api.us-east-1.amazonaws.com/test/graphql";
 
-// describe("chat example", () => {
-//   for (let i = 0; i < 1; ++i) {
-//     it("works with subscription client " + i, async () => {
-//       const subscriptionClient = await createSubscriptionClient();
-//       // const apolloClient = await createApolloClient(subscriptionClient);
+describe("chat example", () => {
+  for (let i = 0; i < 3; ++i) {
+    it("works with subscription client " + i, async () => {
+      const subscriptionClient = await createSubscriptionClient();
+      // const apolloClient = await createApolloClient(subscriptionClient);
 
-//       const iterator = Helpers.subscribe({
-//         client: subscriptionClient,
-//         query: subscriptionOperation()
-//       });
+      const iterator = Helpers.subscribe({
+        client: subscriptionClient,
+        query: subscriptionOperation()
+      });
 
-//       const timestamp = new Date().getTime();
-//       const message = `hello-${timestamp}`;
+      const timestamp = new Date().getTime();
+      const message = `hello-${timestamp}`;
 
-//       await Eventually.eventually(async () => {
-//         await sendMessage(subscriptionClient, message);
-//         const result = iterator.next();
-//         expect(result.value.data.messageFeed.text).toEqual(message);
-//       }, 10);
+      await Eventually.eventually(async () => {
+        await sendMessage(subscriptionClient, message);
+        const result = iterator.next();
+        expect(result.value.data.messageFeed.text).toEqual(message);
+      }, 10);
 
-//       subscriptionClient.close();
-//     });
-//   }
-// });
+      subscriptionClient.unsubscribeAll();
+      subscriptionClient.close();
+    });
+  }
+});
 
 // async function createApolloClient(
 //   subscriptionClient: SubscriptionClient

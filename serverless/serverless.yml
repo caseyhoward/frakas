@@ -1,9 +1,11 @@
 service: frakas
 
+frameworkVersion: 1.58.0
+
 custom:
   currentStage: ${opt:stage, "dev"}
   tableNameSuffix: ${env:FRACAS_TABLE_NAME_SUFFIX, ""}
-
+  webAppBucketName: ${env:BUCKET_NAME}
 provider:
   name: aws
   runtime: nodejs12.x
@@ -13,6 +15,7 @@ provider:
 
   environment:
     FRACAS_TABLE_NAME_SUFFIX: ${self:custom.tableNameSuffix}
+    FRACAS_CLIENT_DOMAIN: ${env:FRACAS_CLIENT_DOMAIN}
 
   iamRoleStatements:
     - Effect: Allow
@@ -175,3 +178,76 @@ resources:
             AttributeType: S
         StreamSpecification:
           StreamViewType: NEW_IMAGE
+
+    WebAppS3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.webAppBucketName}
+        AccessControl: PublicRead
+        WebsiteConfiguration:
+          IndexDocument: index.html
+          ErrorDocument: index.html
+
+    WebAppS3BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket:
+          Ref: WebAppS3Bucket
+        PolicyDocument:
+          Statement:
+            - Sid: PublicReadGetObject
+              Effect: Allow
+              Principal: "*"
+              Action:
+                - s3:GetObject
+              Resource: arn:aws:s3:::${self:custom.webAppBucketName}/*
+
+    WebAppCloudFrontDistribution:
+      Type: AWS::CloudFront::Distribution
+      Properties:
+        DistributionConfig:
+          Origins:
+            - DomainName: ${self:custom.webAppBucketName}.s3.amazonaws.com
+              Id: WebApp-${self:custom.webAppBucketName}
+              CustomOriginConfig:
+                HTTPPort: 80
+                HTTPSPort: 443
+                OriginProtocolPolicy: https-only
+          Enabled: "true"
+          ## Uncomment the following section in case you are using a custom domain
+          # Aliases:
+          # - mysite.example.com
+          DefaultRootObject: index.html
+          CustomErrorResponses:
+            - ErrorCode: 404
+              ResponseCode: 200
+              ResponsePagePath: /index.html
+          DefaultCacheBehavior:
+            AllowedMethods:
+              - DELETE
+              - GET
+              - HEAD
+              - OPTIONS
+              - PATCH
+              - POST
+              - PUT
+            TargetOriginId: WebApp-${self:custom.webAppBucketName}
+            ForwardedValues:
+              QueryString: "false"
+              Cookies:
+                Forward: none
+            ViewerProtocolPolicy: redirect-to-https
+          ViewerCertificate:
+            CloudFrontDefaultCertificate: "true"
+          ## Uncomment the following section in case you want to enable logging for CloudFront requests
+          # Logging:
+          #   IncludeCookies: 'false'
+          #   Bucket: mylogs.s3.amazonaws.com
+          #   Prefix: myprefix
+
+  Outputs:
+    WebAppCloudFrontDistributionOutput:
+      Value:
+        "Fn::GetAtt": [WebAppCloudFrontDistribution, DomainName]
+    WebAppCloudFrontDistributionIdOutput:
+      Value: !Ref WebAppCloudFrontDistribution

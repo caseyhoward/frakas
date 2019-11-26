@@ -24,8 +24,7 @@ export type DynamoDbEnvironmentOptions = {
 
 export function create(): Environment {
   const envWithoutDynamodb = {
-    // clientDomain: EnvironmentVariable.getString("FRACAS_CLIENT_DOMAIN"),
-    clientDomain: "localhost:3000",
+    clientDomain: EnvironmentVariable.getString("FRACAS_CLIENT_DOMAIN"),
     // graphqlPath: EnvironmentVariable.getString("FRACAS_GRAPHQL_PATH"),
     graphqlPath: "",
     subscriptionsPath:

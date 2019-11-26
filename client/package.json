@@ -1,0 +1,27 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "description": "This project is bootstrapped with [Create Elm App](https://github.com/halfzebra/create-elm-app).",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "apollo-cache-inmemory": "1.6.0",
+    "apollo-client": "2.6.4",
+    "apollo-link-http": "^1.5.16",
+    "apollo-link-ws": "^1.0.19",
+    "graphql": "14.3.1",
+    "graphql-tag": "2.10.1",
+    "subscriptions-transport-ws": "0.9.16"
+  },
+  "devDependencies": {
+    "patch-package": "^6.2.0"
+  },
+  "scripts": {
+    "postinstall": "patch-package",
+    "test": "elm-app test"
+  },
+  "author": "",
+  "license": "ISC"
+}

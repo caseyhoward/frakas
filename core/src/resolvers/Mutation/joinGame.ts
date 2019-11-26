@@ -14,17 +14,17 @@ export default async function joinGame(
 ): Promise<string> {
   const playerToken = Uuid.generate();
 
-  // const gameId = await findGameIdByToken(input.joinGameToken);
+  const gameId = await findGameIdByToken(input.joinGameToken);
 
-  // const allExistingPlayers = await findAllPlayersGameId(gameId);
+  const allExistingPlayers = await findAllPlayersGameId(gameId);
 
-  // const playerConfiguration = await createPlayerConfiguration({
-  //   name: "",
-  //   gameId: gameId,
-  //   color: Player.getNextAvailablePlayerColor(allExistingPlayers) // Potential race here. Two players can receive same color.
-  // });
+  const playerConfiguration = await createPlayerConfiguration({
+    name: "",
+    gameId: gameId,
+    color: Player.getNextAvailablePlayerColor(allExistingPlayers) // Potential race here. Two players can receive same color.
+  });
 
-  // await createPlayerToken(playerToken, playerConfiguration.id, gameId);
+  await createPlayerToken(playerToken, playerConfiguration.id, gameId);
 
   PubSub.gameConfigurationChanged(pubSub);
   return playerToken;
