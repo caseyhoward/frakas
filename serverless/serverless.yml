@@ -1,5 +1,7 @@
 service: frakas
 
+frameworkVersion: 1.58.0
+
 custom:
   currentStage: ${opt:stage, "dev"}
   tableNameSuffix: ${env:FRACAS_TABLE_NAME_SUFFIX, ""}

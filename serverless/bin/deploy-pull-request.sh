@@ -20,5 +20,5 @@ curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "aws
 unzip awscliv2.zip
 sudo ./aws/install
 
-aws2 S3 sync ../client/build/ s3://${BUCKET_NAME}/
-aws2 cloudfront create-invalidation --distribution-id WebApp-${BucketName} /*
+aws2 s3 sync ../client/build/ s3://${BUCKET_NAME}/
+aws2 cloudfront create-invalidation --distribution-id WebApp-${BUCKET_NAME} /*
