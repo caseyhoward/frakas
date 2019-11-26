@@ -77,7 +77,6 @@ export function get(
   paritionKey: PartitionKey,
   sortKey: SortKey
 ): Promise<OutputAttributes | null> {
-  console.log(table);
   return Database.get(table.database, table.tableName, {
     PartitionKey: generatePartitionKey(paritionKey),
     SortKey: generateSortKey(sortKey)
