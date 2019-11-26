@@ -16,4 +16,8 @@ export ELM_APP_GRAPHQL_URL=$(cat FRACAS_HTTP_ENDPOINT.txt)/graphql
 
 cd ../client && elm-app build && cd ../serverless
 
-serverless client deploy --no-confirm
+curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+aws2 S3 sync ../client/build/ s3://${BUCKET_NAME}/
