@@ -12,13 +12,13 @@ cd core && rm -rf node_modules && npm install --production && cd ..
 cd serverless && bin/deploy-pull-request.sh && cd ..
 
 cd serverless
-serverless info --verbose --stage pr-${TRAVIS_PULL_REQUEST} | grep ^ServiceEndpointWebsocket: | cut -d ' ' -f 2 > FRACAS_WEBSOCKET_ENDPOINT.txt
+npx serverless info --verbose --stage pr-${TRAVIS_PULL_REQUEST} | grep ^ServiceEndpointWebsocket: | cut -d ' ' -f 2 > FRACAS_WEBSOCKET_ENDPOINT.txt
 export FRACAS_WEBSOCKET_ENDPOINT=$(cat FRACAS_WEBSOCKET_ENDPOINT.txt)
 
-serverless info --verbose --stage pr-${TRAVIS_PULL_REQUEST} | grep ^ServiceEndpoint: | cut -d ' ' -f 2 > FRACAS_HTTP_ENDPOINT.txt
+npx serverless info --verbose --stage pr-${TRAVIS_PULL_REQUEST} | grep ^ServiceEndpoint: | cut -d ' ' -f 2 > FRACAS_HTTP_ENDPOINT.txt
 export FRACAS_HTTP_ENDPOINT=$(cat FRACAS_HTTP_ENDPOINT.txt)/graphql
 
-serverless info --verbose --stage pr-${TRAVIS_PULL_REQUEST} | grep ^WebAppCloudFrontDistributionOutput: | cut -d ' ' -f 2 > CLOUDFRONT_DOMAIN.txt
+npx serverless info --verbose --stage pr-${TRAVIS_PULL_REQUEST} | grep ^WebAppCloudFrontDistributionOutput: | cut -d ' ' -f 2 > CLOUDFRONT_DOMAIN.txt
 export CLOUDFRONT_DOMAIN=$(cat CLOUDFRONT_DOMAIN.txt)
 
 curl -H "Authorization: token ${GITHUB_TOKEN}" -X POST \

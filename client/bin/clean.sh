@@ -3,5 +3,4 @@
 set -x
 set -e
 
-rm -rf elm-stuff/
 rm -rf build/

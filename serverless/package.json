@@ -6,7 +6,7 @@
   "dependencies": {
     "apollo-server-lambda": "^2.9.12",
     "aws-lambda": "^0.1.2",
-    "aws-lambda-graphql": "^0.12.0",
+    "aws-lambda-graphql": "0.12.0",
     "fracas-core": "file:../core",
     "graphql-subscriptions": "^1.1.0",
     "graphql-tools": "^4.0.6",
@@ -19,7 +19,8 @@
     "@types/zen-observable": "^0.8.0",
     "graphql": "^14.5.8",
     "jest": "^24.9.0",
-    "serverless-dynamodb-local": "^0.2.38",
+    "serverless": "1.58.0",
+    "serverless-dynamodb-local": "0.2.38",
     "ts-jest": "^24.2.0",
     "typescript": "^3.7.2"
   },

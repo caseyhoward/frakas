@@ -24,3 +24,11 @@ stages:
     if: type = pull_request
   - name: acceptance-test
     if: type = pull_request
+
+cache:
+  directories:
+    - serverless/.dynamodb
+    - serverless/node_modules
+    - client/elm-stuff
+    - client/node-modules
+    - core/node-modules
