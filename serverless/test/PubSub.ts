@@ -1,21 +1,19 @@
-import * as AwsLambdaGraphql from "aws-lambda-graphql";
 import * as GraphqlSubscriptions from "graphql-subscriptions";
 import { SubscriptionResolveFn } from "fracas-core/src/api/graphql";
 import * as PubSub from "fracas-core/src/PubSub";
 
 export function create(
-  eventStore: AwsLambdaGraphql.DynamoDBEventStore
+  pubSub = new GraphqlSubscriptions.PubSub()
 ): PubSub.PubSub {
-  const awsLambdaGraphqlPubSub = new AwsLambdaGraphql.PubSub({ eventStore });
+  // const pubSub = new GraphqlSubscriptions.PubSub();
   return {
     publish(triggerName: string, payload: any): boolean {
-      awsLambdaGraphqlPubSub.publish(triggerName, payload);
+      pubSub.publish(triggerName, payload);
       return true;
     },
     subscribe: eventName => {
       return (rootValue, args, context, info) => {
-        const result = awsLambdaGraphqlPubSub.subscribe(eventName);
-        return result(rootValue, args, context, info);
+        return pubSub.asyncIterator(eventName);
       };
     },
     withFilter: <
@@ -23,6 +21,6 @@ export function create(
         asyncIteratorFn: SubscriptionResolveFn<any, any, any, any>,
         filterFn: GraphqlSubscriptions.FilterFn
       ) => SubscriptionResolveFn<any, any, any, any>
-    >(<unknown>AwsLambdaGraphql.withFilter)
+    >(<unknown>GraphqlSubscriptions.withFilter)
   };
 }

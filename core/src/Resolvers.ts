@@ -81,7 +81,7 @@ export function create(
         },
         subscribe: PubSub.subscribeGame(pubsub)
       },
-      gamePlayer: PubSub.subscribeGamePlayerUpdate(
+      gamePlayerUpdate: PubSub.subscribeGamePlayerUpdate(
         pubsub,
         repository.findGameIdAndPlayerIdByToken
       ),

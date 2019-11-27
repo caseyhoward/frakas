@@ -35,7 +35,6 @@ export function subscribeGame(
 export function subscribeGameConfiguration(
   pubSub: PubSub
 ): SubscriptionResolveFn<any, any, any, any> {
-  console.log("subscribe game configuration");
   return pubSub.subscribe(Message.INTERNET_GAME_CONFIGURATION_CHANGED);
 }
 
@@ -49,7 +48,6 @@ export function subscribeGamePlayerUpdate(
       payload: Player.PlayerConfiguration,
       input: graphql.SubscriptionGamePlayerUpdateArgs
     ) => {
-      console.log("subscribeGamePlayerUpdate resolver", payload, input);
       return findGameIdAndPlayerIdByToken(input.playerToken).then(
         ({ gameId }) => {
           console.log("gameId", gameId);
@@ -68,12 +66,10 @@ export function gameChanged(
   const message = {
     game: Models.gameWithoutMapToGraphql(game, playerId)
   };
-  console.log("publish game changed");
   pubSub.publish(Message.INTERNET_GAME_CHANGED, message);
 }
 
 export function gameConfigurationChanged(pubSub: PubSub) {
-  console.log("game configuration changed");
   pubSub.publish(Message.INTERNET_GAME_CONFIGURATION_CHANGED, {});
 }
 
@@ -81,6 +77,5 @@ export function gamePlayerUpdated(
   pubSub: PubSub,
   gamePlayer: Player.PlayerConfiguration
 ) {
-  console.log("Publish game player update", gamePlayer);
   pubSub.publish(Message.GAME_PLAYER_UPDATE, gamePlayer);
 }
