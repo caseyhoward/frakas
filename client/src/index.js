@@ -53,15 +53,10 @@ export function waitForClientToConnect(client) {
 }
 
 async function createSubscriptionClient() {
-  const subscriptionClient = new SubscriptionClient(
-    graphqlSubscriptionUrl,
-    {
-      lazy: false,
-      reconnect: true
-    },
-    ws,
-    []
-  );
+  const subscriptionClient = new SubscriptionClient(graphqlSubscriptionUrl, {
+    lazy: false,
+    reconnect: true
+  });
   await waitForClientToConnect(subscriptionClient);
   return subscriptionClient;
 }

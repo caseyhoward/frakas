@@ -3,6 +3,8 @@
 set -x
 set -e
 
+bin/compile.sh # TODO: Store build artifacts in the build stage and reuse those
+
 export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_DEV}
 export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_DEV}
 export BUCKET_NAME=fracas-client-pr-${TRAVIS_PULL_REQUEST}
