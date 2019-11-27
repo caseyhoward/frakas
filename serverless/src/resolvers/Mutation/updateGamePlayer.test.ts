@@ -7,8 +7,7 @@ import * as GraphqlSubscriptions from "graphql-subscriptions";
 
 describe("Mutation.updateGamePlayer", () => {
   it("works", async () => {
-    const inMemoryPubSub = new GraphqlSubscriptions.PubSub();
-    const pubSub = TestPubSub.create(inMemoryPubSub);
+    const pubSub = TestPubSub.create();
 
     const schema = GraphqlSchema.create(repository, pubSub);
     const createGameResult = await graphql.execute({
@@ -24,6 +23,13 @@ describe("Mutation.updateGamePlayer", () => {
       document: configurationSubscribe(hostToken)
     }));
 
+    const playerUpdateSubscription: AsyncIterableIterator<graphql.ExecutionResult<
+      any
+    >> = await (<any>graphql.subscribe({
+      schema,
+      document: subscribeGamePlayerUpdate(hostToken)
+    }));
+
     const joinTokenResult = await graphql.execute({
       schema,
       document: getJoinTokenQuery(hostToken),
@@ -35,22 +41,30 @@ describe("Mutation.updateGamePlayer", () => {
       schema,
       document: joinGameQuery(joinToken)
     });
-    const playerToken = joinGameResult.data!.joinGame.playerToken;
-    await next;
+    const playerToken = joinGameResult.data!.joinGame;
+
+    const nextPlayerUpdate = playerUpdateSubscription.next();
+
+    const updateGamePlayerResult = await graphql.execute({
+      schema,
+      document: updateGamePlayerMutation(playerToken, "some name")
+    });
+    const playerUpdate = await nextPlayerUpdate;
+    expect(playerUpdate.value.data.gamePlayerUpdate.name).toEqual("some name");
   });
 });
 
-// function updateGamePlayerGraphQL(
-//   playerToken: string,
-//   name: string
-// ): graphql.DocumentNode {
-//   return graphql.parse(`mutation {
-//     updateGamePlayer: updateGamePlayer(
-//       playerToken: \\\"${playerToken}\\\",
-//       color: {red: 138, green: 226, blue: 52}, name: \\\"${name}\\\"
-//     )
-//   }`);
-// }
+function updateGamePlayerMutation(
+  playerToken: string,
+  name: string
+): graphql.DocumentNode {
+  return graphql.parse(`mutation {
+    updateGamePlayer: updateGamePlayer(
+      playerToken: "${playerToken}",
+      color: {red: 138, green: 226, blue: 52}, name: "${name}"
+    )
+  }`);
+}
 
 function createGameQuery(): graphql.DocumentNode {
   return graphql.parse(`mutation {
@@ -97,6 +111,20 @@ function configurationSubscribe(playerToken: string): graphql.DocumentNode {
       ...on Game {
         id: id
       }
+    }
+  }`);
+}
+
+function subscribeGamePlayerUpdate(playerToken: string) {
+  return graphql.parse(`subscription {
+    gamePlayerUpdate: gamePlayerUpdate(playerToken: "${playerToken}") {
+      playerId: playerId
+      color {
+        red: red
+        green: green
+        blue: blue
+      }
+      name: name
     }
   }`);
 }

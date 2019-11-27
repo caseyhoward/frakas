@@ -50,7 +50,6 @@ export function subscribeGamePlayerUpdate(
     ) => {
       return findGameIdAndPlayerIdByToken(input.playerToken).then(
         ({ gameId }) => {
-          console.log("gameId", gameId);
           return payload.gameId === gameId;
         }
       );

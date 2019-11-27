@@ -20,6 +20,7 @@ import { updateMapForGame } from "./resolvers/Mutation/updateGameMap";
 import * as SubscriptionGame from "./resolvers/Subscription/game";
 import * as SubscriptionGameOrConfiguration from "./resolvers/Subscription/gameOrConfiguration";
 import * as PubSub from "./PubSub";
+import * as Player from "./models/Player";
 import { ulid } from "ulid";
 
 import { withFilter } from "aws-lambda-graphql";
@@ -72,7 +73,6 @@ export function create(
             "playerToken"
           >
         ) => {
-          console.log("***() game resolver", input);
           return SubscriptionGame.resolve(
             repository.findGameIdAndPlayerIdByToken,
             repository.findGameById,
@@ -81,13 +81,19 @@ export function create(
         },
         subscribe: PubSub.subscribeGame(pubsub)
       },
-      gamePlayerUpdate: PubSub.subscribeGamePlayerUpdate(
-        pubsub,
-        repository.findGameIdAndPlayerIdByToken
-      ),
+      gamePlayerUpdate: {
+        resolve: (
+          playerConfiguration: Player.PlayerConfiguration
+        ): graphql.PlayerConfiguration => {
+          return Player.playerConfigurationToGraphql(playerConfiguration);
+        },
+        subscribe: PubSub.subscribeGamePlayerUpdate(
+          pubsub,
+          repository.findGameIdAndPlayerIdByToken
+        )
+      },
       messageFeed: {
         resolve: (rootValue: Message) => {
-          // root value is the payload from sendMessage mutation
           return rootValue;
         },
         subscribe: withFilter(
