@@ -44,15 +44,12 @@ export function subscribeGamePlayerUpdate(
 ): SubscriptionResolveFn<any, any, any, any> {
   return pubSub.withFilter(
     pubSub.subscribe(Message.GAME_PLAYER_UPDATE),
-    (
+    async (
       payload: Player.PlayerConfiguration,
       input: graphql.SubscriptionGamePlayerUpdateArgs
     ) => {
-      return findGameIdAndPlayerIdByToken(input.playerToken).then(
-        ({ gameId }) => {
-          return payload.gameId === gameId;
-        }
-      );
+      const { gameId } = await findGameIdAndPlayerIdByToken(input.playerToken);
+      return payload.gameId === gameId;
     }
   );
 }
