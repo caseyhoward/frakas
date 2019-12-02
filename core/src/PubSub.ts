@@ -49,6 +49,12 @@ export function subscribeGamePlayerUpdate(
       input: graphql.SubscriptionGamePlayerUpdateArgs
     ) => {
       const { gameId } = await findGameIdAndPlayerIdByToken(input.playerToken);
+      console.log(
+        "subscribeGamePlayerUpdate",
+        JSON.stringify(payload),
+        JSON.stringify(input),
+        gameId
+      );
       return payload.gameId === gameId;
     }
   );
@@ -73,5 +79,6 @@ export function gamePlayerUpdated(
   pubSub: PubSub,
   gamePlayer: Player.PlayerConfiguration
 ) {
+  console.log("gamePlayerUpdated", gamePlayer);
   pubSub.publish(Message.GAME_PLAYER_UPDATE, gamePlayer);
 }
