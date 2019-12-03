@@ -1,4 +1,6 @@
 import * as Color from "./Color";
+import * as Graphql from "../api/graphql";
+import { playerConfiguration } from "../test/Builders";
 
 export const allowedColors = [
   Color.lightGreen,
@@ -72,3 +74,13 @@ export function isCurrentUserHost(
 }
 
 const defaultHostColor: Color.Color = Color.lightGreen;
+
+export function playerConfigurationToGraphql(
+  playerConfiguration: PlayerConfiguration
+): Graphql.PlayerConfiguration {
+  return {
+    ...playerConfiguration,
+    __typename: "PlayerConfiguration",
+    playerId: playerConfiguration.id
+  };
+}

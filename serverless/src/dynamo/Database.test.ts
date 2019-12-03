@@ -8,13 +8,13 @@ describe("Database", () => {
     const id = Builders.uniqueId();
     const partitionKey = `some-id-${id}`;
 
-    await Database.put(TestDatabase.database, "fracas-dev", {
+    await Database.put(TestDatabase.database, "FracasTest", {
       PartitionKey: partitionKey,
       SortKey: "some-sort",
       Blah: "abc"
     });
 
-    const result = await Database.get(TestDatabase.database, "fracas-dev", {
+    const result = await Database.get(TestDatabase.database, "FracasTest", {
       PartitionKey: partitionKey,
       SortKey: "some-sort"
     });
@@ -32,7 +32,7 @@ describe("Database", () => {
 
     [1, 2, 3, 4].forEach(
       async number =>
-        await Database.put(TestDatabase.database, "fracas-dev", {
+        await Database.put(TestDatabase.database, "FracasTest", {
           PartitionKey: partitionKey,
           SortKey: `some-sort-${number}`,
           Blah: "abc"
@@ -42,7 +42,7 @@ describe("Database", () => {
     await Eventually.eventually(async () => {
       const result = await Database.query(
         TestDatabase.database,
-        "fracas-dev",
+        "FracasTest",
         "PartitionKey = :partitionKey AND SortKey BETWEEN :sortKey1 AND :sortKey2",
         {
           ":partitionKey": partitionKey,
@@ -70,14 +70,14 @@ describe("Database", () => {
     const id = Builders.uniqueId();
     const partitionKey = `some-id-${id}`;
 
-    await Database.put(TestDatabase.database, "fracas-dev", {
+    await Database.put(TestDatabase.database, "FracasTest", {
       PartitionKey: partitionKey,
       SortKey: "some-sort",
       Test: "abc",
       Something: "123"
     });
 
-    const result = await Database.get(TestDatabase.database, "fracas-dev", {
+    const result = await Database.get(TestDatabase.database, "FracasTest", {
       PartitionKey: partitionKey,
       SortKey: "some-sort"
     });
@@ -91,7 +91,7 @@ describe("Database", () => {
 
     await Database.update(
       TestDatabase.database,
-      "fracas-dev",
+      "FracasTest",
       {
         PartitionKey: partitionKey,
         SortKey: "some-sort"
@@ -103,7 +103,7 @@ describe("Database", () => {
 
     const afterUpdateResult = await Database.get(
       TestDatabase.database,
-      "fracas-dev",
+      "FracasTest",
       {
         PartitionKey: partitionKey,
         SortKey: "some-sort"

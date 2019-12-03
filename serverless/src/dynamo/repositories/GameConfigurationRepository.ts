@@ -7,7 +7,7 @@ export async function create(
   newGame: Models.NewGameConfiguration
 ): Promise<string> {
   const gameId = Uuid.generate();
-  Table.put(
+  await Table.put(
     table,
     { prefix: Table.PartitionKeyPrefix.game, value: gameId },
     Table.valueSortKey(Table.SortKeyValue.map),
@@ -24,7 +24,7 @@ export async function updateMap(
   id: string,
   mapId: Models.MapId
 ): Promise<boolean> {
-  Table.put(
+  await Table.put(
     table,
     { prefix: Table.PartitionKeyPrefix.game, value: id },
     Table.valueSortKey(Table.SortKeyValue.map),

@@ -15,15 +15,15 @@ import joinGame from "./resolvers/Mutation/joinGame";
 import startGame from "./resolvers/Mutation/startGame";
 import updateGamePlayerName from "./resolvers/Mutation/updateGamePlayerName";
 import updateGamePlayerColor from "./resolvers/Mutation/updateGamePlayerColor";
+import updateGamePlayer from "./resolvers/Mutation/updateGamePlayer";
 import { updateMapForGame } from "./resolvers/Mutation/updateGameMap";
 import * as SubscriptionGame from "./resolvers/Subscription/game";
 import * as SubscriptionGameOrConfiguration from "./resolvers/Subscription/gameOrConfiguration";
 import * as PubSub from "./PubSub";
+import * as Player from "./models/Player";
 import { ulid } from "ulid";
 
 import { withFilter } from "aws-lambda-graphql";
-
-// import * as PubSub from "fracas-core/src/PubSub";
 
 type MessageType = "greeting" | "test";
 
@@ -73,7 +73,6 @@ export function create(
             "playerToken"
           >
         ) => {
-          console.log("***() game resolver", input);
           return SubscriptionGame.resolve(
             repository.findGameIdAndPlayerIdByToken,
             repository.findGameById,
@@ -82,9 +81,19 @@ export function create(
         },
         subscribe: PubSub.subscribeGame(pubsub)
       },
+      gamePlayerUpdate: {
+        resolve: (
+          playerConfiguration: Player.PlayerConfiguration
+        ): graphql.PlayerConfiguration => {
+          return Player.playerConfigurationToGraphql(playerConfiguration);
+        },
+        subscribe: PubSub.subscribeGamePlayerUpdate(
+          pubsub,
+          repository.findGameIdAndPlayerIdByToken
+        )
+      },
       messageFeed: {
         resolve: (rootValue: Message) => {
-          // root value is the payload from sendMessage mutation
           return rootValue;
         },
         subscribe: withFilter(
@@ -124,10 +133,6 @@ export function createWithoutSubscriptions(
           repository.findGameById,
           input
         )
-      // test: async () => {
-      //   pubsub.publish("TEST", { abc: 123 });
-      //   return true;
-      // }
     },
     Mutation: {
       async sendMessage(rootValue: any, { text, type }: SendMessageArgs) {
@@ -173,6 +178,13 @@ export function createWithoutSubscriptions(
           pubsub,
           repository.findGameIdAndPlayerIdByToken,
           repository.updatePlayerColor,
+          input
+        ),
+      updateGamePlayer: (_, input) =>
+        updateGamePlayer(
+          pubsub,
+          repository.findGameIdAndPlayerIdByToken,
+          repository.updateGamePlayer,
           input
         ),
       updateGameMap: (_, input) =>

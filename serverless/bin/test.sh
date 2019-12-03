@@ -3,5 +3,4 @@
 set -e
 set -x
 
-tsc
-npm run test
+FRACAS_TABLE_NAME_SUFFIX=Test serverless dynamodb start & sleep 5 && npm run test

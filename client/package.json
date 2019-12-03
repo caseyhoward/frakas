@@ -16,6 +16,7 @@
     "subscriptions-transport-ws": "0.9.16"
   },
   "devDependencies": {
+    "@babel/runtime": "^7.7.4",
     "patch-package": "^6.2.0"
   },
   "scripts": {

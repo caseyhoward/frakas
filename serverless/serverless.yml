@@ -5,7 +5,16 @@ frameworkVersion: 1.58.0
 custom:
   currentStage: ${opt:stage, "dev"}
   tableNameSuffix: ${env:FRACAS_TABLE_NAME_SUFFIX, ""}
-  webAppBucketName: ${env:BUCKET_NAME}
+  webAppBucketName: ${env:BUCKET_NAME, ""}
+  dynamodb:
+    start:
+      host: localhost
+      port: "8000"
+      # noStart: true
+      migrate: true
+    stages:
+      - test
+      - dev
 provider:
   name: aws
   runtime: nodejs12.x
@@ -15,7 +24,7 @@ provider:
 
   environment:
     FRACAS_TABLE_NAME_SUFFIX: ${self:custom.tableNameSuffix}
-    FRACAS_CLIENT_DOMAIN: ${env:FRACAS_CLIENT_DOMAIN}
+    FRACAS_CLIENT_DOMAIN: ${env:FRACAS_CLIENT_DOMAIN, "localhost"}
 
   iamRoleStatements:
     - Effect: Allow
@@ -251,3 +260,6 @@ resources:
         "Fn::GetAtt": [WebAppCloudFrontDistribution, DomainName]
     WebAppCloudFrontDistributionIdOutput:
       Value: !Ref WebAppCloudFrontDistribution
+
+plugins:
+  - serverless-dynamodb-local

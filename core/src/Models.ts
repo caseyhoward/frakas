@@ -193,6 +193,7 @@ export function gameConfigurationToGraphQl(
   return {
     __typename: "GameConfiguration",
     id: configuration.id,
+    // TODO: Reuse logic in Player module
     players: players.map(player => {
       return {
         ...player,
