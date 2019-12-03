@@ -1,0 +1,115 @@
+diff --git a/node_modules/aws-lambda-graphql/dist/DynamoDBEventStore.js b/node_modules/aws-lambda-graphql/dist/DynamoDBEventStore.js
+index 737b68d..a60b5d5 100644
+--- a/node_modules/aws-lambda-graphql/dist/DynamoDBEventStore.js
++++ b/node_modules/aws-lambda-graphql/dist/DynamoDBEventStore.js
+@@ -3,18 +3,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
+ const ulid_1 = require("ulid");
+ const aws_sdk_1 = require("aws-sdk");
+ class DynamoDBEventStore {
+-    constructor({ eventsTable = 'Events' } = {}) {
+-        this.publish = async (event) => {
+-            await this.db
+-                .put({
+-                TableName: this.tableName,
+-                Item: Object.assign({ id: ulid_1.ulid() }, event),
+-            })
+-                .promise();
+-        };
+-        this.db = new aws_sdk_1.DynamoDB.DocumentClient();
+-        this.tableName = eventsTable;
+-    }
++  constructor({ eventsTable = "Events" } = {}) {
++    this.publish = async event => {
++      console.log("storing event", JSON.stringify(event), this.tableName);
++      await this.db
++        .put({
++          TableName: this.tableName,
++          Item: Object.assign({ id: ulid_1.ulid() }, event)
++        })
++        .promise();
++    };
++    this.db = new aws_sdk_1.DynamoDB.DocumentClient();
++    this.tableName = eventsTable;
++  }
+ }
+ exports.DynamoDBEventStore = DynamoDBEventStore;
+ exports.default = DynamoDBEventStore;
+diff --git a/node_modules/aws-lambda-graphql/dist/PubSub.js b/node_modules/aws-lambda-graphql/dist/PubSub.js
+index 35bcc03..cdc43ab 100644
+--- a/node_modules/aws-lambda-graphql/dist/PubSub.js
++++ b/node_modules/aws-lambda-graphql/dist/PubSub.js
+@@ -1,33 +1,47 @@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ class PubSub {
+-    constructor({ eventStore }) {
+-        this.subscribe = (eventNames) => {
+-            return async (rootValue, args, { $$internal }) => {
+-                const { connection, operation, pubSub, registerSubscriptions, subscriptionManager, } = $$internal;
+-                const names = Array.isArray(eventNames) ? eventNames : [eventNames];
+-                // register subscriptions only if it set to do so
+-                // basically this means that client sent subscription operation over websocket
+-                if (registerSubscriptions) {
+-                    await subscriptionManager.subscribe(names, connection, 
+-                    // this is called only on subscription so operationId should be filled
+-                    operation);
+-                }
+-                return pubSub.asyncIterator(names);
+-            };
+-        };
+-        /**
+-         * Notice that this propagates event through storage
+-         * So you should not expect to fire in same process
+-         */
+-        this.publish = async (eventName, payload) => {
+-            await this.eventStore.publish({
+-                payload,
+-                event: eventName,
+-            });
+-        };
+-        this.eventStore = eventStore;
+-    }
++  constructor({ eventStore }) {
++    this.subscribe = eventNames => {
++      return async (rootValue, args, { $$internal }) => {
++        const {
++          connection,
++          operation,
++          pubSub,
++          registerSubscriptions,
++          subscriptionManager
++        } = $$internal;
++        const names = Array.isArray(eventNames) ? eventNames : [eventNames];
++        // register subscriptions only if it set to do so
++        // basically this means that client sent subscription operation over websocket
++        if (registerSubscriptions) {
++          await subscriptionManager.subscribe(
++            names,
++            connection,
++            // this is called only on subscription so operationId should be filled
++            operation
++          );
++        }
++        return pubSub.asyncIterator(names);
++      };
++    };
++    /**
++     * Notice that this propagates event through storage
++     * So you should not expect to fire in same process
++     */
++    this.publish = async (eventName, payload) => {
++      console.log(
++        "aws-lambda-graphql PubSub.publish",
++        eventName,
++        JSON.stringify(payload)
++      );
++      await this.eventStore.publish({
++        payload,
++        event: eventName
++      });
++    };
++    this.eventStore = eventStore;
++  }
+ }
+ exports.PubSub = PubSub;
+ exports.default = PubSub;
