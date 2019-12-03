@@ -1,8 +1,8 @@
 diff --git a/node_modules/aws-lambda-graphql/dist/DynamoDBEventStore.js b/node_modules/aws-lambda-graphql/dist/DynamoDBEventStore.js
-index 737b68d..a60b5d5 100644
+index 737b68d..b50f5b3 100644
 --- a/node_modules/aws-lambda-graphql/dist/DynamoDBEventStore.js
 +++ b/node_modules/aws-lambda-graphql/dist/DynamoDBEventStore.js
-@@ -3,18 +3,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
+@@ -3,18 +3,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
  const ulid_1 = require("ulid");
  const aws_sdk_1 = require("aws-sdk");
  class DynamoDBEventStore {
@@ -20,13 +20,23 @@ index 737b68d..a60b5d5 100644
 -    }
 +  constructor({ eventsTable = "Events" } = {}) {
 +    this.publish = async event => {
-+      console.log("storing event", JSON.stringify(event), this.tableName);
++      const id = ulid_1.ulid();
++      console.log(
++        "storing event",
++        this.tableName,
++        JSON.stringify(Object.assign({ id: id }, event))
++      );
 +      await this.db
 +        .put({
 +          TableName: this.tableName,
-+          Item: Object.assign({ id: ulid_1.ulid() }, event)
++          Item: Object.assign({ id: id }, event)
 +        })
 +        .promise();
++      const result = await this.db.get({
++        TableName: tableName,
++        Key: { id: id }
++      });
++      console.log("Get result", result);
 +    };
 +    this.db = new aws_sdk_1.DynamoDB.DocumentClient();
 +    this.tableName = eventsTable;
