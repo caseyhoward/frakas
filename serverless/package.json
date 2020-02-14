@@ -5,7 +5,7 @@
   "main": "src/hanlders/graphql.js",
   "dependencies": {
     "apollo-server-lambda": "^2.9.12",
-    "aws-lambda": "^0.1.2",
+    "aws-lambda": "^1.0.5",
     "aws-lambda-graphql": "^0.12.0",
     "fracas-core": "file:../core",
     "graphql-subscriptions": "^1.1.0",
